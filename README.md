@@ -4,11 +4,6 @@ MBA680 Assignment 2, six steps: (1) peer group, (2) risk/time questionnaire, (3)
 
 **Authoring group (two people): Adwaaiit Pande and Ayushi Mishra.** Distinct from the 4-person Markowitz Portfolio Project group (Adwaaiit, Ayushi, Divyanshu Kumar Gautam, Sonakshi Tyagi). Results are LOCKED at 5 respondents (user decision, 2026-10-05): Shree Charan, Kshitij, Kartika, Ayushi Mishra, Adwaaiit Pande. The user asked for all "who didn't submit" mentions (Divyanshu/Sonakshi) to be removed from the report and portal; do not reintroduce them.
 
-## Status (2026-10-05): everything delivered
-- **Report** `MBA680_RoboAdvisory_Report.docx`, 27 pages, written in first person plural ("we/our") at the user's request. Adds Section 3.5 (Figures 3.1–3.4: utility, value, Prelec weighting and β–δ discount curves for all 5), Figure 4.1 (EUT risky share vs γ), Section 6 now documents the evaluation view, and Section 7 has a new γ-identification limitation. TOC is manual (dot leaders); page numbers auto-corrected by a script that searches `pdftotext` output.
-- **Portal** https://claude.ai/artifact/GBBbf2PqceCFmkZ4mHihhU, Version 7. It adds inline-SVG Step-4 curves to the individual results screen and the evaluation view (colors are bound to each person, matching the report and deck) and an identification-caveat key finding. "Didn't submit" text removed. All test suites pass (portfolio parity, pooling parity, jsdom DOM tests including curve checks).
-- **Presentation** `MBA680_Assignment2_RoboAdvisory.pptx`, 14 slides on the user's template (the Microsoft "Product pitch deck" design, turquoise #3AEFCC, Arial Black / Avenir). Native charts and tables. Adwaaiit presents slides 1–6 (approach, instruments, engine, the two Step-4 graph slides), Ayushi presents 7–13 (divider, outcomes table, EUT, BPT, personality, portal screenshots, summary), and both take the close. Each slide's notes carry a full script with timings plus Q&A backup on the final slide. The portal appears as screenshots only (user choice).
-- **Submission zip** `MBA680_Assignment2_Final.zip`: report and deck, plus report_source/ (docx-js), portal_source/, python_pipeline/ (14 pytest pass), step4_graphs/ (make_graphs.py, PNGs, parameters CSV) and presentation_source/build_deck.py.
 
 ## Key numbers (pooled; from pipeline/outputs CSVs)
 | Person | G-L | γ | λ | α | β | δ | BPT safety | BPT ret / vol |
