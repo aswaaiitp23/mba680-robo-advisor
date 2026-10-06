@@ -1,0 +1,1788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Risk & Time Preferences — MBA680</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F1ECDD;
+    --panel: #E8E1CC;
+    --ink: #211E18;
+    --ink-soft: #62594A;
+    --rule: #C9BC9C;
+    --accent: #2E4374;
+    --accent-ink: #FFFFFF;
+    --accent-wash: #DCE1EE;
+    --gain: #2F6B4F;
+    --loss: #8B3A2B;
+    --focus: #2E4374;
+    --radius: 3px;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1B1912;
+      --panel: #242019;
+      --ink: #ECE6D6;
+      --ink-soft: #B4A98F;
+      --rule: #4A4230;
+      --accent: #7C93D6;
+      --accent-ink: #17203A;
+      --accent-wash: #26314E;
+      --gain: #6FBE95;
+      --loss: #D98A78;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1B1912;
+    --panel: #242019;
+    --ink: #ECE6D6;
+    --ink-soft: #B4A98F;
+    --rule: #4A4230;
+    --accent: #7C93D6;
+    --accent-ink: #17203A;
+    --accent-wash: #26314E;
+    --gain: #6FBE95;
+    --loss: #D98A78;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+  .wrap {
+    max-width: 620px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 28px 20px 40px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .brand {
+    font-size: 13px;
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-family: 'Newsreader', Georgia, serif;
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 1.2;
+    margin: 0 0 10px;
+  }
+  h2.qtext {
+    font-family: 'Newsreader', Georgia, serif;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 1.35;
+    margin: 0 0 22px;
+  }
+  p.lede {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    max-width: 46ch;
+  }
+  .progress-track {
+    height: 2px;
+    background: var(--rule);
+    border-radius: 2px;
+    margin: 4px 0 28px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.3s ease;
+  }
+  .progress-label {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  label.field-label {
+    display: block;
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin: 22px 0 8px;
+  }
+  input[type="text"] {
+    width: 100%;
+    font-family: inherit;
+    font-size: 17px;
+    padding: 12px 14px;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--panel);
+    color: var(--ink);
+  }
+  input[type="text"]:focus, button:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+  .btn {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 13px 22px;
+    border-radius: var(--radius);
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: var(--accent-ink);
+    cursor: pointer;
+    text-align: center;
+  }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn-ghost {
+    background: transparent;
+    color: var(--accent);
+  }
+  .btn-row { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+  .options { display: flex; flex-direction: column; gap: 14px; }
+  .option-card {
+    text-align: left;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--ink);
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .option-card:hover { border-color: var(--accent); }
+  .option-card.selected { border-color: var(--accent); background: var(--accent-wash); }
+  .option-label {
+    font-size: 12.5px;
+    text-transform: none;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .option-main {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 19px;
+  }
+  .amt-gain { color: var(--gain); }
+  .amt-loss { color: var(--loss); }
+  .scale-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin: 6px 0 4px;
+  }
+  .scale-btn {
+    flex: 1 1 auto;
+    min-width: 38px;
+    padding: 10px 0;
+    text-align: center;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--panel);
+    color: var(--ink);
+    cursor: pointer;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 15px;
+  }
+  .scale-btn.selected { border-color: var(--accent); background: var(--accent); color: var(--accent-ink); }
+  .scale-ends {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin-bottom: 20px;
+  }
+  .hairline {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 32px 0 22px;
+  }
+  .foot-links {
+    margin-top: auto;
+    padding-top: 24px;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+  }
+  .foot-links a { color: var(--accent); }
+  textarea.dump {
+    width: 100%;
+    min-height: 140px;
+    font-family: ui-monospace, 'SF Mono', Consolas, monospace;
+    font-size: 12px;
+    padding: 10px;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--panel);
+    color: var(--ink);
+  }
+  table.results {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin-top: 18px;
+  }
+  table.results th, table.results td {
+    border-bottom: 1px solid var(--rule);
+    padding: 8px 10px;
+    text-align: left;
+  }
+  table.results th { color: var(--ink-soft); font-weight: 500; }
+  .note {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-top: 18px;
+    line-height: 1.5;
+  }
+  .hidden { display: none !important; }
+  @media (min-width: 560px) {
+    .options { flex-direction: row; }
+    .option-card { flex: 1; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+/* =========================================================================
+   ENGINE — behavioral primitives, adaptive Bayesian question selection.
+   Ported and tested from robo_advisory/elicitation/{models,engine}.py
+   ========================================================================= */
+const PARAM_NAMES = ["gamma", "lam", "alpha_w", "beta_hyp", "delta"];
+const GRID_SPECS = {
+  gamma:    [-0.5, 3.0, 6],
+  lam:      [1.0, 4.0, 6],
+  alpha_w:  [0.4, 1.4, 6],
+  beta_hyp: [0.5, 1.0, 6],
+  delta:    [0.90, 1.0, 6],
+};
+function linspace(lo, hi, n) {
+  if (n === 1) return [lo];
+  const step = (hi - lo) / (n - 1);
+  return Array.from({ length: n }, (_, i) => lo + i * step);
+}
+function buildGrid() {
+  const axes = {};
+  for (const k of PARAM_NAMES) { const [lo, hi, n] = GRID_SPECS[k]; axes[k] = linspace(lo, hi, n); }
+  const cols = { gamma: [], lam: [], alpha_w: [], beta_hyp: [], delta: [] };
+  for (const g of axes.gamma) for (const l of axes.lam) for (const a of axes.alpha_w)
+    for (const b of axes.beta_hyp) for (const d of axes.delta) {
+      cols.gamma.push(g); cols.lam.push(l); cols.alpha_w.push(a); cols.beta_hyp.push(b); cols.delta.push(d);
+    }
+  const n = cols.gamma.length;
+  const grid = {};
+  for (const k of PARAM_NAMES) grid[k] = Float64Array.from(cols[k]);
+  return { axes, grid, n };
+}
+const { grid: GRID, n: N_GRID } = buildGrid();
+
+function valueFn(x, gamma, lam) {
+  const exponent = Math.max(1.0 - gamma, 0.05);
+  return x >= 0 ? Math.pow(Math.abs(x), exponent) : -lam * Math.pow(Math.abs(x), exponent);
+}
+function prelecWeight(p, alphaW) {
+  const pc = Math.min(Math.max(p, 1e-9), 1.0);
+  return Math.exp(-Math.pow(-Math.log(pc), alphaW));
+}
+function quasiHyperbolic(tDays, betaHyp, delta) {
+  if (tDays <= 0) return 1.0;
+  return betaHyp * Math.pow(delta, tDays / 30.0);
+}
+function choiceProbB(uA, uB, noise = 0.35) {
+  const z = Math.max(Math.min((uB - uA) / noise, 30), -30);
+  return 1.0 / (1.0 + Math.exp(-z));
+}
+function buildCandidatePool() {
+  const pool = [];
+  const pGrid = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];
+  const riskCombos = [
+    [2000, -1600, 0.5], [2000, -400, 0.4], [5000, 0, 0.45],
+    [1000, -1000, 0.5], [3000, -600, 0.35], [800, -3200, 0.6],
+  ];
+  for (const p of pGrid) for (const [high, low, sureFrac] of riskCombos) {
+    const sure = Math.round((sureFrac * high + (1 - sureFrac) * low) * 10) / 10;
+    pool.push({ kind: "risk", p, high, low, sure });
+  }
+  const delayPairs = [[0, 30], [0, 90], [360, 390], [0, 180]];
+  const xPcts = [0.5, 1, 2, 3, 5, 7, 10, 15, 20, 30];
+  for (const [tNow, tLater] of delayPairs) for (const xPct of xPcts) {
+    pool.push({ kind: "time", amountNow: 1000.0, tNow, amountLater: 1000.0 * (1 + xPct / 100.0), tLater });
+  }
+  return pool;
+}
+const CANDIDATE_POOL = buildCandidatePool();
+
+function promptUtilities(prompt, gamma, lam, alphaW, betaHyp, delta) {
+  if (prompt.kind === "risk") {
+    const uA = valueFn(prompt.sure, gamma, lam);
+    const w = prelecWeight(prompt.p, alphaW);
+    const uB = w * valueFn(prompt.high, gamma, lam) + (1 - w) * valueFn(prompt.low, gamma, lam);
+    return [uA, uB];
+  } else {
+    const dNow = quasiHyperbolic(prompt.tNow, betaHyp, delta);
+    const dLater = quasiHyperbolic(prompt.tLater, betaHyp, delta);
+    return [dNow * valueFn(prompt.amountNow, gamma, lam), dLater * valueFn(prompt.amountLater, gamma, lam)];
+  }
+}
+function precomputePBPool(pool) {
+  const out = pool.map(() => new Float64Array(N_GRID));
+  for (let c = 0; c < pool.length; c++) {
+    const prompt = pool[c]; const row = out[c];
+    for (let i = 0; i < N_GRID; i++) {
+      const [uA, uB] = promptUtilities(prompt, GRID.gamma[i], GRID.lam[i], GRID.alpha_w[i], GRID.beta_hyp[i], GRID.delta[i]);
+      row[i] = choiceProbB(uA, uB);
+    }
+  }
+  return out;
+}
+const P_B_POOL = precomputePBPool(CANDIDATE_POOL);
+
+function newSession() { return { logPosterior: new Float64Array(N_GRID), asked: [] }; }
+function posteriorOf(session) {
+  let max = -Infinity;
+  for (let i = 0; i < N_GRID; i++) if (session.logPosterior[i] > max) max = session.logPosterior[i];
+  const p = new Float64Array(N_GRID); let sum = 0;
+  for (let i = 0; i < N_GRID; i++) { p[i] = Math.exp(session.logPosterior[i] - max); sum += p[i]; }
+  for (let i = 0; i < N_GRID; i++) p[i] /= sum;
+  return p;
+}
+function entropyOf(p) {
+  let h = 0;
+  for (let i = 0; i < N_GRID; i++) if (p[i] > 1e-12) h -= p[i] * Math.log(p[i]);
+  return h;
+}
+function selectNextQuestion(session, availableIdx) {
+  const post = posteriorOf(session);
+  const hBefore = entropyOf(post);
+  let bestIdx = availableIdx[0], bestGain = -Infinity;
+  for (const c of availableIdx) {
+    const pB = P_B_POOL[c];
+    let pMarg = 0;
+    for (let i = 0; i < N_GRID; i++) pMarg += post[i] * pB[i];
+    pMarg = Math.min(Math.max(pMarg, 1e-6), 1 - 1e-6);
+    const hAfterB = entropyAfter(session, pB, true);
+    const hAfterA = entropyAfter(session, pB, false);
+    const gain = hBefore - (pMarg * hAfterB + (1 - pMarg) * hAfterA);
+    if (gain > bestGain) { bestGain = gain; bestIdx = c; }
+  }
+  return bestIdx;
+}
+function entropyAfter(session, pB, isB) {
+  const newLog = new Float64Array(N_GRID);
+  let max = -Infinity;
+  for (let i = 0; i < N_GRID; i++) {
+    const lik = isB ? pB[i] : (1 - pB[i]);
+    newLog[i] = session.logPosterior[i] + Math.log(Math.max(lik, 1e-9));
+    if (newLog[i] > max) max = newLog[i];
+  }
+  let sum = 0; const p = new Float64Array(N_GRID);
+  for (let i = 0; i < N_GRID; i++) { p[i] = Math.exp(newLog[i] - max); sum += p[i]; }
+  for (let i = 0; i < N_GRID; i++) p[i] /= sum;
+  return entropyOf(p);
+}
+function updateSession(session, idx, choseB) {
+  const pB = P_B_POOL[idx];
+  for (let i = 0; i < N_GRID; i++) session.logPosterior[i] += Math.log(Math.max(choseB ? pB[i] : (1 - pB[i]), 1e-9));
+  session.asked.push({ idx, choseB });
+}
+function posteriorSummary(session) {
+  const post = posteriorOf(session);
+  const out = {};
+  for (const name of PARAM_NAMES) {
+    const vals = GRID[name];
+    let mean = 0;
+    for (let i = 0; i < N_GRID; i++) mean += post[i] * vals[i];
+    const order = Array.from({ length: N_GRID }, (_, i) => i).sort((a, b) => vals[a] - vals[b]);
+    let cum = 0, lo = null, hi = null;
+    for (const i of order) { cum += post[i]; if (lo === null && cum >= 0.05) lo = vals[i]; if (hi === null && cum >= 0.95) hi = vals[i]; }
+    out[name] = { mean: Math.round(mean * 1000) / 1000, ci90: [Math.round(lo * 1000) / 1000, Math.round(hi * 1000) / 1000] };
+  }
+  return out;
+}
+
+/* =========================================================================
+   APP — state machine, rendering, formatting, persistence
+   ========================================================================= */
+const N_QUESTIONS = 18;
+const N_RETESTS = 2;
+const BFI2_URL = "https://www.colby.edu/academics/departments-and-programs/psychology/research-opportunities/personality-lab/the-bfi-2/";
+
+const state = {
+  screen: "intro",         // intro | anchor1 | anchor2 | grablelytton | dospert | question | done | researcher
+  name: "",
+  generalRisk: null,
+  generalPatience: null,
+  glIndex: 0,
+  glAnswers: [],            // {itemNum, choiceLetter, score}
+  dospertIndex: 0,
+  dospertAnswers: [],       // {text, domain, rating}
+  bfi2DomainIndex: 0,
+  bfi2Answers: {},          // itemIndex -> rating 1-5
+  session: null,
+  available: [],
+  qIndex: 0,                 // count of main adaptive questions asked so far
+  inRetest: false,
+  retestQueue: [],
+  retestOf: [],               // parallel array: which earlier answers index each retest repeats
+  currentIdx: null,
+  selected: null,
+};
+
+/* ---- Grable & Lytton (1999) 13-item Financial Risk Tolerance Scale ----
+   Source: Grable, J. E., & Lytton, R. H. (1999). Financial risk tolerance
+   revisited: The development of a risk assessment instrument. Financial
+   Services Review, 8, 163-181. Reproduced here per the authors' own
+   distribution of this instrument as a free assessment tool (hosted
+   publicly by Rutgers NJAES and distributed as a white-label handout by
+   Kitces.com for advisor/client and research use), with citation. */
+const GRABLE_LYTTON_ITEMS = [
+  { q: "In general, how would your best friend describe you as a risk taker?",
+    opts: [["A real gambler",4],["Willing to take risks after completing adequate research",3],["Cautious",2],["A real risk avoider",1]] },
+  { q: "You are on a TV game show and can choose one of the following. Which would you take?",
+    opts: [["$1,000 in cash",1],["A 50% chance at winning $5,000",2],["A 25% chance at winning $10,000",3],["A 5% chance at winning $100,000",4]] },
+  { q: "You have just finished saving for a \u201Conce-in-a-lifetime\u201D vacation. Three weeks before you plan to leave, you lose your job. You would:",
+    opts: [["Cancel the vacation",1],["Take a much more modest vacation",2],["Go as scheduled, reasoning that you need the time to prepare for a job search",3],["Extend your vacation, because this might be your last chance to go first-class",4]] },
+  { q: "If you unexpectedly received $20,000 to invest, what would you do?",
+    opts: [["Deposit it in a bank account, money market account, or insured CD",1],["Invest it in safe high-quality bonds or bond mutual funds",2],["Invest it in stocks or stock mutual funds",3]] },
+  { q: "In terms of experience, how comfortable are you investing in stocks or stock mutual funds?",
+    opts: [["Not at all comfortable",1],["Somewhat comfortable",2],["Very comfortable",3]] },
+  { q: "When you think of the word \u201Crisk,\u201D which of the following words comes to mind first?",
+    opts: [["Loss",1],["Uncertainty",2],["Opportunity",3],["Thrill",4]] },
+  { q: "Some experts are predicting prices of assets such as gold, jewels, collectibles, and real estate (hard assets) to increase in value; bond prices may fall, however, experts tend to agree that government bonds are relatively safe. Most of your investment assets are now in high-interest government bonds. What would you do?",
+    opts: [["Hold the bonds",1],["Sell the bonds, put half the proceeds into money market accounts, and the other half into hard assets",2],["Sell the bonds and put the total proceeds into hard assets",3],["Sell the bonds, put all the money into hard assets, and borrow additional money to buy more",4]] },
+  { q: "Given the best and worst case returns of the four investment choices below, which would you prefer?",
+    opts: [["$200 gain best case; $0 gain/loss worst case",1],["$800 gain best case, $200 loss worst case",2],["$2,600 gain best case, $800 loss worst case",3],["$4,800 gain best case, $2,400 loss worst case",4]] },
+  { q: "In addition to whatever you own, you have been given $1,000. You are now asked to choose between:",
+    opts: [["A sure gain of $500",1],["A 50% chance to gain $1,000 and a 50% chance to gain nothing",3]] },
+  { q: "In addition to whatever you own, you have been given $2,000. You are now asked to choose between:",
+    opts: [["A sure loss of $500",1],["A 50% chance to lose $1,000 and a 50% chance to lose nothing",3]] },
+  { q: "Suppose a relative left you an inheritance of $100,000, stipulating in the will that you invest ALL the money in ONE of the following choices. Which one would you select?",
+    opts: [["A savings account or money market mutual fund",1],["A mutual fund that owns stocks and bonds",2],["A portfolio of 15 common stocks",3],["Commodities like gold, silver, and oil",4]] },
+  { q: "If you had to invest $20,000, which of the following investment choices would you find most appealing?",
+    opts: [["60% in low-risk investments, 30% in medium-risk investments, 10% in high-risk investments",1],["30% in low-risk investments, 40% in medium-risk investments, 30% in high-risk investments",2],["10% in low-risk investments, 40% in medium-risk investments, 50% in high-risk investments",3]] },
+  { q: "Your trusted friend and neighbor, an experienced geologist, is putting together a group of investors to fund an exploratory gold mining venture. The venture could pay back 50 to 100 times the investment if successful. If the mine is a bust, the entire investment is worthless. Your friend estimates the chance of success is only 20%. If you had the money, how much would you invest?",
+    opts: [["Nothing",1],["One month's salary",2],["Three months' salary",3],["Six months' salary",4]] },
+];
+
+/* ---- DOSPERT financial subscale (Blais & Weber, 2006) ----
+   Source: Blais, A.-R., & Weber, E. U. (2006). A domain-specific risk-taking
+   (DOSPERT) scale for adult populations. Judgment and Decision Making, 1,
+   33-47. Reproduced per the DOSPERT scale's own license (Weber lab,
+   Princeton/Columbia Center for Decision Sciences): free for academic use
+   without permission, citation required, commercial use prohibited. */
+const DOSPERT_FIN_ITEMS = [
+  { text: "Betting a day's income at the horse races.", domain: "gambling" },
+  { text: "Investing 10% of your annual income in a moderate growth mutual fund.", domain: "investing" },
+  { text: "Betting a day's income at a high-stake poker game.", domain: "gambling" },
+  { text: "Investing 5% of your annual income in a very speculative stock.", domain: "investing" },
+  { text: "Betting a day's income on the outcome of a sporting event.", domain: "gambling" },
+  { text: "Investing 10% of your annual income in a new business venture.", domain: "investing" },
+];
+
+// BFI-2 (Soto & John, 2017) — 60 items, 5 domains x 3 facets x 4 items.
+// Item text and domain/facet assignment from Table 6 of Soto & John (2017),
+// Journal of Personality and Social Psychology, 113(1), 117-143 (open text
+// via eScholarship). Reverse-keying determined by semantic polarity and
+// cross-checked against the paper's published scoring-key fragments
+// (13 of 15 facets confirmed numerically; Intellectual Curiosity and
+// Creative Imagination inferred by the same 2-true/2-false-keyed balance
+// rule the authors state they applied to every facet).
+// BFI-2 items copyright 2015 by Oliver P. John and Christopher J. Soto;
+// reproduced for non-commercial academic use per the authors' stated policy.
+
+const BFI2_ITEMS = [
+  // Extraversion
+  { text: "Is outgoing, sociable", domain: "Extraversion", facet: "Sociability", reverse: false },
+  { text: "Tends to be quiet", domain: "Extraversion", facet: "Sociability", reverse: true },
+  { text: "Is sometimes shy, introverted", domain: "Extraversion", facet: "Sociability", reverse: true },
+  { text: "Is talkative", domain: "Extraversion", facet: "Sociability", reverse: false },
+  { text: "Has an assertive personality", domain: "Extraversion", facet: "Assertiveness", reverse: false },
+  { text: "Is dominant, acts as a leader", domain: "Extraversion", facet: "Assertiveness", reverse: false },
+  { text: "Prefers to have others take charge", domain: "Extraversion", facet: "Assertiveness", reverse: true },
+  { text: "Finds it hard to influence people", domain: "Extraversion", facet: "Assertiveness", reverse: true },
+  { text: "Is full of energy", domain: "Extraversion", facet: "Energy Level", reverse: false },
+  { text: "Shows a lot of enthusiasm", domain: "Extraversion", facet: "Energy Level", reverse: false },
+  { text: "Rarely feels excited or eager", domain: "Extraversion", facet: "Energy Level", reverse: true },
+  { text: "Is less active than other people", domain: "Extraversion", facet: "Energy Level", reverse: true },
+  // Agreeableness
+  { text: "Is compassionate, has a soft heart", domain: "Agreeableness", facet: "Compassion", reverse: false },
+  { text: "Is helpful and unselfish with others", domain: "Agreeableness", facet: "Compassion", reverse: false },
+  { text: "Can be cold and uncaring", domain: "Agreeableness", facet: "Compassion", reverse: true },
+  { text: "Feels little sympathy for others", domain: "Agreeableness", facet: "Compassion", reverse: true },
+  { text: "Is respectful, treats others with respect", domain: "Agreeableness", facet: "Respectfulness", reverse: false },
+  { text: "Is polite, courteous to others", domain: "Agreeableness", facet: "Respectfulness", reverse: false },
+  { text: "Is sometimes rude to others", domain: "Agreeableness", facet: "Respectfulness", reverse: true },
+  { text: "Starts arguments with others", domain: "Agreeableness", facet: "Respectfulness", reverse: true },
+  { text: "Assumes the best about people", domain: "Agreeableness", facet: "Trust", reverse: false },
+  { text: "Has a forgiving nature", domain: "Agreeableness", facet: "Trust", reverse: false },
+  { text: "Tends to find fault with others", domain: "Agreeableness", facet: "Trust", reverse: true },
+  { text: "Is suspicious of others' intentions", domain: "Agreeableness", facet: "Trust", reverse: true },
+  // Conscientiousness
+  { text: "Is systematic, likes to keep things in order", domain: "Conscientiousness", facet: "Organization", reverse: false },
+  { text: "Keeps things neat and tidy", domain: "Conscientiousness", facet: "Organization", reverse: false },
+  { text: "Tends to be disorganized", domain: "Conscientiousness", facet: "Organization", reverse: true },
+  { text: "Leaves a mess, doesn't clean up", domain: "Conscientiousness", facet: "Organization", reverse: true },
+  { text: "Is efficient, gets things done", domain: "Conscientiousness", facet: "Productiveness", reverse: false },
+  { text: "Is persistent, works until the task is finished", domain: "Conscientiousness", facet: "Productiveness", reverse: false },
+  { text: "Tends to be lazy", domain: "Conscientiousness", facet: "Productiveness", reverse: true },
+  { text: "Has difficulty getting started on tasks", domain: "Conscientiousness", facet: "Productiveness", reverse: true },
+  { text: "Is reliable, can always be counted on", domain: "Conscientiousness", facet: "Responsibility", reverse: false },
+  { text: "Is dependable, steady", domain: "Conscientiousness", facet: "Responsibility", reverse: false },
+  { text: "Can be somewhat careless", domain: "Conscientiousness", facet: "Responsibility", reverse: true },
+  { text: "Sometimes behaves irresponsibly", domain: "Conscientiousness", facet: "Responsibility", reverse: true },
+  // Negative Emotionality
+  { text: "Worries a lot", domain: "Negative Emotionality", facet: "Anxiety", reverse: false },
+  { text: "Can be tense", domain: "Negative Emotionality", facet: "Anxiety", reverse: false },
+  { text: "Is relaxed, handles stress well", domain: "Negative Emotionality", facet: "Anxiety", reverse: true },
+  { text: "Rarely feels anxious or afraid", domain: "Negative Emotionality", facet: "Anxiety", reverse: true },
+  { text: "Often feels sad", domain: "Negative Emotionality", facet: "Depression", reverse: false },
+  { text: "Tends to feel depressed, blue", domain: "Negative Emotionality", facet: "Depression", reverse: false },
+  { text: "Feels secure, comfortable with self", domain: "Negative Emotionality", facet: "Depression", reverse: true },
+  { text: "Stays optimistic after experiencing a setback", domain: "Negative Emotionality", facet: "Depression", reverse: true },
+  { text: "Is temperamental, gets emotional easily", domain: "Negative Emotionality", facet: "Emotional Volatility", reverse: false },
+  { text: "Is moody, has up and down mood swings", domain: "Negative Emotionality", facet: "Emotional Volatility", reverse: false },
+  { text: "Is emotionally stable, not easily upset", domain: "Negative Emotionality", facet: "Emotional Volatility", reverse: true },
+  { text: "Keeps their emotions under control", domain: "Negative Emotionality", facet: "Emotional Volatility", reverse: true },
+  // Open-Mindedness
+  { text: "Is complex, a deep thinker", domain: "Open-Mindedness", facet: "Intellectual Curiosity", reverse: false },
+  { text: "Is curious about many different things", domain: "Open-Mindedness", facet: "Intellectual Curiosity", reverse: false },
+  { text: "Has little interest in abstract ideas", domain: "Open-Mindedness", facet: "Intellectual Curiosity", reverse: true },
+  { text: "Avoids intellectual, philosophical discussions", domain: "Open-Mindedness", facet: "Intellectual Curiosity", reverse: true },
+  { text: "Is fascinated by art, music, or literature", domain: "Open-Mindedness", facet: "Aesthetic Sensitivity", reverse: false },
+  { text: "Values art and beauty", domain: "Open-Mindedness", facet: "Aesthetic Sensitivity", reverse: false },
+  { text: "Has few artistic interests", domain: "Open-Mindedness", facet: "Aesthetic Sensitivity", reverse: true },
+  { text: "Thinks poetry and plays are boring", domain: "Open-Mindedness", facet: "Aesthetic Sensitivity", reverse: true },
+  { text: "Is inventive, finds clever ways to do things", domain: "Open-Mindedness", facet: "Creative Imagination", reverse: false },
+  { text: "Is original, comes up with new ideas", domain: "Open-Mindedness", facet: "Creative Imagination", reverse: false },
+  { text: "Has little creativity", domain: "Open-Mindedness", facet: "Creative Imagination", reverse: true },
+  { text: "Has difficulty imagining things", domain: "Open-Mindedness", facet: "Creative Imagination", reverse: true },
+];
+
+
+/* =========================================================================
+   REAL ASSET UNIVERSE — Step 5's data. Extracted from the group's own
+   Markowitz Portfolio Project workbook (66 NSE stocks, 3yr daily covariance,
+   rf=6.75%). The workbook exposes Sigma and the optimized weights of its own
+   max-Sharpe portfolio P, but not a per-asset expected-return vector, so mu
+   here is back-solved via Black-Litterman-style reverse optimization on a
+   market-cap-weighted reference portfolio with a conventional market price
+   of risk (lambda=2.5, He & Litterman 1999) -- NOT raw given data. See the
+   Python pipeline's real_asset_universe_standard_lambda/meta.json for the
+   full derivation and the in-sample-optimization caveat on the alternative
+   (portfolio-P-implied) version this deliberately avoids.
+   ========================================================================= */
+const UNIVERSE_RAW = {"tickers":["JIOFIN","NMDC","OBEROIRLTY","IIFL","CGCL","SONACOMS","VEDL","HINDZINC","NAVINFLUOR","LUPIN","FEDERALBNK","CHOLAFIN","VIJAYA","ADANIPORTS","GPPL","M&MFIN","APTUS","KARURVYSYA","CANFINHOME","IEX","GLAND","CUMMINSIND","AJANTPHARM","PHOENIXLTD","OFSS","AFFLE","CAPLIPOINT","SAREGAMA","HOMEFIRST","GRINDWELL","ZYDUSLIFE","SHRIRAMFIN","CDSL","AUBANK","SUNDARMFIN","SUNPHARMA","HSCL","MAHABANK","BEL","LODHA","DCBBANK","TCS","DIVISLAB","TATAELXSI","IRFC","COLPAL","YESBANK","HINDUNILVR","PNBHOUSING","ZENSARTECH","JUSTDIAL","INDIANB","SBICARD","BANKINDIA","INDUSTOWER","LICHSGFIN","CENTRALBK","SUMICHEM","GVT&D","INDOTECH","MACPOWER","TDPOWERSYS","LUMAXTECH","APOLLO","ASTRAMICRO","GABRIEL"],"mu":[0.15192,0.153484,0.146165,0.153961,0.126441,0.131431,0.161876,0.150347,0.119481,0.112738,0.120457,0.143553,0.102876,0.162343,0.141363,0.145074,0.124735,0.131068,0.133132,0.150037,0.108525,0.138176,0.10066,0.134495,0.140897,0.127469,0.135943,0.115311,0.119849,0.11118,0.11739,0.163312,0.162788,0.113894,0.113288,0.100582,0.145603,0.167279,0.156033,0.159692,0.142013,0.106875,0.114797,0.127065,0.174278,0.105098,0.151847,0.09054,0.147287,0.139282,0.135452,0.147846,0.117725,0.157634,0.139627,0.150502,0.176092,0.128113,0.13685,0.160422,0.129784,0.153849,0.143917,0.165653,0.153548,0.158628],"sigma":[[0.107602,0.043833,0.043796,0.048126,0.027675,0.042698,0.045012,0.036679,0.022734,0.023589,0.027458,0.039247,0.015431,0.053672,0.042846,0.038552,0.02941,0.034576,0.031444,0.045342,0.020723,0.039112,0.01791,0.03356,0.032849,0.028597,0.038458,0.027451,0.025035,0.02072,0.025439,0.0498,0.054781,0.02595,0.022622,0.016187,0.049423,0.052592,0.042581,0.051901,0.041046,0.012585,0.022503,0.02943,0.055624,0.016822,0.039991,0.007819,0.041603,0.037185,0.040712,0.043165,0.029909,0.047361,0.034808,0.043628,0.057152,0.034676,0.03584,0.052597,0.039593,0.050436,0.043696,0.047265,0.044253,0.046787],[0.043833,0.119129,0.04138,0.049957,0.035901,0.03767,0.076843,0.06034,0.027712,0.024582,0.031965,0.033394,0.019062,0.049533,0.045566,0.039367,0.030601,0.032088,0.038378,0.053275,0.021873,0.043958,0.014869,0.032608,0.033284,0.03434,0.039137,0.030695,0.025884,0.022505,0.025676,0.049677,0.05497,0.02172,0.025746,0.013855,0.054076,0.061833,0.054601,0.046904,0.045949,0.008694,0.022939,0.029524,0.067039,0.014017,0.047681,0.00344,0.042494,0.039461,0.036273,0.04334,0.021995,0.05413,0.046629,0.052851,0.070845,0.028046,0.04167,0.043501,0.034238,0.051741,0.037812,0.04936,0.04381,0.046573],[0.043796,0.04138,0.103529,0.049724,0.023209,0.033055,0.045606,0.036572,0.030646,0.023057,0.027433,0.040398,0.026444,0.042748,0.040491,0.041935,0.029598,0.030283,0.035616,0.0421,0.020266,0.037078,0.018762,0.043498,0.037181,0.033326,0.037453,0.025359,0.028133,0.022867,0.023545,0.049578,0.056286,0.02072,0.017074,0.012072,0.041783,0.038275,0.04405,0.072512,0.034659,0.011465,0.024438,0.029033,0.043985,0.017347,0.039503,0.008946,0.042626,0.040724,0.033152,0.035934,0.026637,0.036864,0.036413,0.042951,0.043024,0.029838,0.035774,0.044556,0.030183,0.049503,0.04514,0.047953,0.041138,0.047738],[0.048126,0.049957,0.049724,0.211356,0.039542,0.028488,0.042527,0.05244,0.027228,0.024089,0.033915,0.048714,0.025823,0.045136,0.044864,0.046502,0.039226,0.038666,0.039836,0.0497,0.023119,0.028353,0.018636,0.033159,0.028194,0.041105,0.054548,0.03221,0.04517,0.031984,0.02226,0.055849,0.060355,0.03478,0.019877,0.010771,0.053746,0.053412,0.042087,0.055987,0.048825,0.010942,0.024618,0.037396,0.054426,0.015983,0.049413,0.010229,0.065788,0.038183,0.045303,0.041374,0.03283,0.048079,0.046206,0.055488,0.055299,0.034744,0.036468,0.062259,0.039851,0.063463,0.055891,0.05618,0.051202,0.056414],[0.027675,0.035901,0.023209,0.039542,0.399191,0.023951,0.030004,0.033481,0.019481,0.017333,0.016102,0.039536,0.015231,0.033605,0.015094,0.029423,0.021591,0.025826,0.033433,0.02662,0.019774,0.029128,0.010541,0.026061,0.01107,0.014575,0.034217,0.028011,0.016444,0.015803,0.016395,0.044007,0.042698,0.021965,0.026532,0.010288,0.02286,0.044389,0.038481,0.020814,0.003409,0.000811,0.012666,0.023183,0.063606,0.021339,0.022447,0.005485,0.029158,0.022393,0.026521,0.029353,0.01814,0.042749,0.022647,0.020309,0.046264,0.030197,0.015223,0.022747,0.005898,0.029832,0.034946,0.033224,0.038226,0.032108],[0.042698,0.03767,0.033055,0.028488,0.023951,0.114393,0.032443,0.029784,0.021536,0.021078,0.02306,0.020134,0.01971,0.040152,0.032299,0.032907,0.030082,0.025142,0.020944,0.034708,0.019034,0.029547,0.015817,0.022306,0.024826,0.027127,0.026078,0.016363,0.024904,0.021658,0.022388,0.033112,0.045945,0.017563,0.015385,0.014588,0.036774,0.038332,0.032537,0.034941,0.030739,0.011766,0.018605,0.025147,0.038166,0.007948,0.030353,0.005533,0.02482,0.037883,0.021194,0.032346,0.021742,0.03778,0.025677,0.033578,0.041696,0.021916,0.036527,0.039053,0.026441,0.03924,0.034795,0.039939,0.039507,0.043787],[0.045012,0.076843,0.045606,0.042527,0.030004,0.032443,0.265603,0.085859,0.025753,0.026263,0.022378,0.033343,0.015686,0.044121,0.040702,0.046372,0.029479,0.035456,0.031394,0.048555,0.018172,0.03739,0.015376,0.033955,0.025571,0.029321,0.034936,0.021174,0.025861,0.018464,0.031352,0.050101,0.051429,0.019881,0.02597,0.010821,0.040023,0.056681,0.05526,0.050977,0.044838,0.011165,0.0251,0.026835,0.055846,0.01876,0.047073,0.0131,0.0401,0.032816,0.032602,0.047094,0.024804,0.048047,0.044202,0.04929,0.058115,0.034551,0.03667,0.039493,0.032754,0.039578,0.030378,0.04806,0.040343,0.042855],[0.036679,0.06034,0.036572,0.05244,0.033481,0.029784,0.085859,0.170045,0.018159,0.027112,0.024661,0.032485,0.023636,0.040325,0.032096,0.038459,0.020263,0.026171,0.027027,0.041229,0.016621,0.031631,0.015246,0.026669,0.019935,0.025841,0.02325,0.010979,0.01969,0.018219,0.026469,0.039016,0.040852,0.01668,0.017429,0.011784,0.03255,0.045698,0.047471,0.03497,0.027401,0.008748,0.022984,0.019223,0.05191,0.011408,0.03199,0.003156,0.03645,0.025038,0.026906,0.039001,0.024273,0.034328,0.027657,0.040807,0.049589,0.02262,0.033132,0.050913,0.027803,0.039845,0.026738,0.045011,0.03647,0.044946],[0.022734,0.027712,0.030646,0.027228,0.019481,0.021536,0.025753,0.018159,0.108817,0.010942,0.018995,0.028898,0.013163,0.034677,0.023268,0.025737,0.020067,0.027929,0.02033,0.026885,0.018003,0.027949,0.016651,0.021277,0.016377,0.024192,0.026871,0.023979,0.019508,0.014793,0.022292,0.032749,0.028299,0.020785,0.012972,0.010036,0.033702,0.0295,0.034517,0.023452,0.028837,0.004182,0.015846,0.014038,0.028135,0.014699,0.02617,0.006671,0.025149,0.017737,0.022581,0.027956,0.015441,0.028338,0.025715,0.025888,0.028136,0.026317,0.02541,0.030195,0.016283,0.040162,0.024597,0.041102,0.027585,0.028587],[0.023589,0.024582,0.023057,0.024089,0.017333,0.021078,0.026263,0.027112,0.010942,0.062561,0.012258,0.016356,0.011507,0.020677,0.017661,0.017887,0.010819,0.017413,0.016815,0.02274,0.015343,0.021174,0.020342,0.016547,0.024786,0.014211,0.027311,0.007901,0.013373,0.007635,0.031446,0.021842,0.025885,0.007984,0.01172,0.025043,0.021296,0.02143,0.02041,0.019592,0.017419,0.004675,0.025284,0.01811,0.020071,0.011277,0.021129,0.001718,0.018321,0.017992,0.014895,0.019996,0.008479,0.017709,0.018427,0.022129,0.025016,0.019028,0.025084,0.019572,0.013393,0.027132,0.011571,0.025007,0.023895,0.024524],[0.027458,0.031965,0.027433,0.033915,0.016102,0.02306,0.022378,0.024661,0.018995,0.012258,0.065079,0.028057,0.010859,0.031995,0.029333,0.0279,0.019255,0.031005,0.026197,0.024481,0.01096,0.023102,0.010411,0.023049,0.025041,0.018244,0.021038,0.014971,0.017251,0.009815,0.012724,0.033648,0.033668,0.025778,0.016675,0.004391,0.028076,0.044097,0.028619,0.02892,0.034138,0.007556,0.011889,0.018246,0.029928,0.013648,0.031855,0.006522,0.028761,0.024206,0.021519,0.036862,0.016078,0.041753,0.027522,0.031973,0.044999,0.019328,0.01933,0.028165,0.023024,0.032806,0.023211,0.027017,0.028715,0.035273],[0.039247,0.033394,0.040398,0.048714,0.039536,0.020134,0.033343,0.032485,0.028898,0.016356,0.028057,0.108824,0.014333,0.039893,0.02829,0.047552,0.029741,0.029878,0.03675,0.039072,0.017984,0.029094,0.015003,0.037469,0.032089,0.022636,0.031169,0.026453,0.039592,0.019186,0.01733,0.07253,0.038106,0.037206,0.036094,0.009226,0.031314,0.046847,0.033558,0.050326,0.035694,0.010402,0.020412,0.02537,0.047172,0.021416,0.031865,0.010914,0.051512,0.026169,0.034777,0.034105,0.037778,0.041343,0.034118,0.039829,0.045633,0.022515,0.025625,0.033936,0.025082,0.032876,0.036776,0.034961,0.032008,0.037229],[0.015431,0.019062,0.026444,0.025823,0.015231,0.01971,0.015686,0.023636,0.013163,0.011507,0.010859,0.014333,0.163349,0.015469,0.024921,0.01842,0.025063,0.011989,0.016194,0.006426,0.01594,0.013643,0.013393,0.013872,0.012371,0.026432,0.030531,0.02113,0.001988,0.025901,0.012044,0.017335,0.031928,0.014117,0.00095,0.005281,0.030018,0.020843,0.012588,0.025824,0.01644,0.00179,0.014075,0.011924,0.01649,0.005807,0.019908,0.01055,0.021928,0.020779,0.014583,0.014385,0.008835,0.018199,0.013993,0.018517,0.019482,0.014587,0.019552,0.034247,0.01659,0.037476,0.031848,0.016789,0.022238,0.032874],[0.053672,0.049533,0.042748,0.045136,0.033605,0.040152,0.044121,0.040325,0.034677,0.020677,0.031995,0.039893,0.015469,0.115257,0.04795,0.041316,0.032862,0.039795,0.041478,0.050626,0.020892,0.047505,0.014041,0.03467,0.032981,0.031145,0.035677,0.029156,0.026008,0.028857,0.026273,0.053728,0.051287,0.020628,0.023425,0.01732,0.050733,0.058615,0.055694,0.048782,0.048569,0.01223,0.019821,0.02837,0.060413,0.017502,0.04899,0.007654,0.042577,0.029782,0.036876,0.049106,0.026399,0.05626,0.045695,0.051102,0.064662,0.036602,0.036871,0.050592,0.035185,0.053272,0.039826,0.045048,0.051385,0.045284],[0.042846,0.045566,0.040491,0.044864,0.015094,0.032299,0.040702,0.032096,0.023268,0.017661,0.029333,0.02829,0.024921,0.04795,0.134641,0.032118,0.035923,0.030754,0.036835,0.042495,0.019005,0.038888,0.019595,0.035605,0.03425,0.036334,0.03592,0.035291,0.02319,0.026781,0.017591,0.039441,0.050749,0.017848,0.01063,0.007887,0.052573,0.057261,0.048397,0.040288,0.044186,0.012935,0.01718,0.029105,0.057696,0.01557,0.050551,0.005078,0.038054,0.037211,0.036989,0.041416,0.020489,0.04949,0.038828,0.038433,0.061137,0.02671,0.036276,0.05183,0.029769,0.047435,0.041848,0.043126,0.04816,0.049318],[0.038552,0.039367,0.041935,0.046502,0.029423,0.032907,0.046372,0.038459,0.025737,0.017887,0.0279,0.047552,0.01842,0.041316,0.032118,0.113982,0.026705,0.0381,0.036993,0.035155,0.021759,0.031545,0.019741,0.034642,0.032865,0.028386,0.025176,0.023661,0.030651,0.020535,0.017999,0.064278,0.036833,0.027104,0.030668,0.014467,0.032601,0.046834,0.033774,0.048313,0.034363,0.014711,0.019212,0.026362,0.043254,0.019571,0.03583,0.013236,0.038702,0.029013,0.029408,0.039751,0.032596,0.042785,0.035338,0.0408,0.04988,0.032249,0.024131,0.034811,0.033358,0.034263,0.033229,0.042398,0.036964,0.04245],[0.02941,0.030601,0.029598,0.039226,0.021591,0.030082,0.029479,0.020263,0.020067,0.010819,0.019255,0.029741,0.025063,0.032862,0.035923,0.026705,0.102736,0.027386,0.027162,0.029952,0.009976,0.024618,0.014036,0.02437,0.028555,0.027433,0.022626,0.020855,0.038464,0.025332,0.016708,0.037741,0.041644,0.021715,0.018177,0.0079,0.029581,0.042568,0.027953,0.044353,0.038206,0.009746,0.015131,0.016216,0.038193,0.011516,0.035163,0.007559,0.035918,0.032177,0.028941,0.029267,0.021797,0.036401,0.024043,0.037341,0.043798,0.022391,0.030744,0.053388,0.027479,0.031131,0.032024,0.024807,0.032776,0.037517],[0.034576,0.032088,0.030283,0.038666,0.025826,0.025142,0.035456,0.026171,0.027929,0.017413,0.031005,0.029878,0.011989,0.039795,0.030754,0.0381,0.027386,0.112928,0.024529,0.031607,0.016133,0.025049,0.016023,0.018592,0.020283,0.020529,0.030486,0.016813,0.028171,0.012582,0.019829,0.044977,0.040955,0.022856,0.020843,0.012572,0.029096,0.056581,0.036056,0.032523,0.042946,0.006073,0.011346,0.021291,0.0484,0.009473,0.041065,0.002973,0.039517,0.022248,0.028995,0.046179,0.021004,0.053377,0.040382,0.039722,0.057333,0.02626,0.022585,0.040897,0.026282,0.040638,0.031353,0.03957,0.036311,0.040426],[0.031444,0.038378,0.035616,0.039836,0.033433,0.020944,0.031394,0.027027,0.02033,0.016815,0.026197,0.03675,0.016194,0.041478,0.036835,0.036993,0.027162,0.024529,0.086294,0.041048,0.013858,0.02831,0.013259,0.027332,0.033174,0.028502,0.029446,0.024884,0.030802,0.023193,0.016659,0.044431,0.043975,0.020085,0.022306,0.010508,0.032102,0.047515,0.036839,0.042756,0.035004,0.009807,0.016101,0.020562,0.046616,0.015147,0.037974,0.010733,0.04532,0.031426,0.030748,0.035186,0.019666,0.040879,0.033617,0.043606,0.051494,0.025056,0.02829,0.028129,0.018944,0.038864,0.028605,0.039504,0.041266,0.036479],[0.045342,0.053275,0.0421,0.0497,0.02662,0.034708,0.048555,0.041229,0.026885,0.02274,0.024481,0.039072,0.006426,0.050626,0.042495,0.035155,0.029952,0.031607,0.041048,0.151628,0.022679,0.03688,0.011958,0.028169,0.023314,0.039846,0.037952,0.028517,0.026784,0.022505,0.028989,0.052069,0.051413,0.020585,0.018315,0.014578,0.047571,0.050716,0.048587,0.047251,0.047549,0.014456,0.026269,0.032128,0.058418,0.020956,0.045494,0.008479,0.05089,0.03774,0.036677,0.039499,0.029464,0.046636,0.041109,0.049531,0.059437,0.030556,0.029076,0.049533,0.023388,0.049561,0.048508,0.060991,0.056545,0.055244],[0.020723,0.021873,0.020266,0.023119,0.019774,0.019034,0.018172,0.016621,0.018003,0.015343,0.01096,0.017984,0.01594,0.020892,0.019005,0.021759,0.009976,0.016133,0.013858,0.022679,0.102103,0.011986,0.017473,0.013322,0.02081,0.02219,0.034047,0.018687,0.004118,0.017007,0.018864,0.020924,0.020934,0.010095,0.006517,0.01129,0.018627,0.024243,0.017601,0.017985,0.008356,0.00932,0.017213,0.016802,0.021622,0.009038,0.017302,0.005263,0.023447,0.01817,0.018856,0.016528,0.009429,0.017488,0.014522,0.019551,0.025841,0.015962,0.018233,0.024438,0.017555,0.022314,0.031255,0.040805,0.023056,0.025001],[0.039112,0.043958,0.037078,0.028353,0.029128,0.029547,0.03739,0.031631,0.027949,0.021174,0.023102,0.029094,0.013643,0.047505,0.038888,0.031545,0.024618,0.025049,0.02831,0.03688,0.011986,0.095284,0.010331,0.02678,0.032611,0.022887,0.028734,0.022013,0.015042,0.022914,0.024549,0.043156,0.041615,0.013299,0.019167,0.013728,0.031139,0.041669,0.046916,0.034027,0.030014,0.008795,0.017258,0.019808,0.042582,0.015104,0.036211,0.004202,0.022895,0.022753,0.028175,0.037641,0.017612,0.040368,0.032765,0.037437,0.047164,0.029621,0.041716,0.034097,0.027228,0.047314,0.035872,0.042117,0.041389,0.033499],[0.01791,0.014869,0.018762,0.018636,0.010541,0.015817,0.015376,0.015246,0.016651,0.020342,0.010411,0.015003,0.013393,0.014041,0.019595,0.019741,0.014036,0.016023,0.013259,0.011958,0.017473,0.010331,0.096657,0.013922,0.014341,0.011866,0.029965,0.017811,0.005765,0.014634,0.018283,0.016002,0.014284,0.010351,0.007809,0.017239,0.02398,0.017981,0.013821,0.012985,0.013928,0.00195,0.021863,0.010961,0.015186,0.008581,0.017447,-0.00073,0.020523,0.013776,0.016179,0.012341,0.010648,0.014675,0.017126,0.014449,0.018673,0.016799,0.017185,0.015804,0.009902,0.020478,0.016346,0.020792,0.015854,0.027814],[0.03356,0.032608,0.043498,0.033159,0.026061,0.022306,0.033955,0.026669,0.021277,0.016547,0.023049,0.037469,0.013872,0.03467,0.035605,0.034642,0.02437,0.018592,0.027332,0.028169,0.013322,0.02678,0.013922,0.135029,0.028235,0.019346,0.033515,0.015361,0.028753,0.018695,0.013303,0.044744,0.040562,0.017876,0.032227,0.012458,0.027583,0.037899,0.034525,0.061034,0.028858,0.010599,0.018069,0.022374,0.03845,0.020812,0.032545,0.011404,0.024735,0.019018,0.021807,0.032563,0.025084,0.035494,0.035244,0.030671,0.046225,0.021482,0.033963,0.043939,0.02142,0.03742,0.031413,0.028983,0.026483,0.040554],[0.032849,0.033284,0.037181,0.028194,0.01107,0.024826,0.025571,0.019935,0.016377,0.024786,0.025041,0.032089,0.012371,0.032981,0.03425,0.032865,0.028555,0.020283,0.033174,0.023314,0.02081,0.032611,0.014341,0.028235,0.147874,0.033371,0.025797,0.024103,0.030012,0.022686,0.021413,0.030289,0.036129,0.009129,0.016017,0.018925,0.026852,0.038476,0.033606,0.042965,0.027036,0.036574,0.02187,0.036471,0.043126,0.018405,0.033239,0.006913,0.037304,0.056005,0.027126,0.024645,0.020452,0.028912,0.027584,0.034574,0.039194,0.023168,0.019365,0.041011,0.027125,0.030958,0.027042,0.034773,0.033645,0.033426],[0.028597,0.03434,0.033326,0.041105,0.014575,0.027127,0.029321,0.025841,0.024192,0.014211,0.018244,0.022636,0.026432,0.031145,0.036334,0.028386,0.027433,0.020529,0.028502,0.039846,0.02219,0.022887,0.011866,0.019346,0.033371,0.11182,0.036503,0.027374,0.015416,0.029437,0.021876,0.030449,0.04603,0.011772,0.013269,0.010704,0.032703,0.03204,0.035824,0.03961,0.028265,0.017528,0.020798,0.026318,0.047677,0.007634,0.029934,0.002654,0.034092,0.047171,0.038726,0.024648,0.017,0.031965,0.02589,0.029117,0.043168,0.025509,0.028665,0.033862,0.020257,0.037106,0.044591,0.032316,0.032065,0.038499],[0.038458,0.039137,0.037453,0.054548,0.034217,0.026078,0.034936,0.02325,0.026871,0.027311,0.021038,0.031169,0.030531,0.035677,0.03592,0.025176,0.022626,0.030486,0.029446,0.037952,0.034047,0.028734,0.029965,0.033515,0.025797,0.036503,0.160971,0.035305,0.018781,0.026999,0.027228,0.036412,0.051254,0.018588,0.018977,0.019989,0.054794,0.041192,0.031722,0.043348,0.028901,0.012572,0.02753,0.035278,0.039886,0.014407,0.037445,0.001784,0.038787,0.029512,0.036849,0.031781,0.017829,0.035172,0.027205,0.035943,0.047813,0.028711,0.032277,0.053496,0.036963,0.043604,0.041745,0.043551,0.04072,0.051831],[0.027451,0.030695,0.025359,0.03221,0.028011,0.016363,0.021174,0.010979,0.023979,0.007901,0.014971,0.026453,0.02113,0.029156,0.035291,0.023661,0.020855,0.016813,0.024884,0.028517,0.018687,0.022013,0.017811,0.015361,0.024103,0.027374,0.035305,0.1794,0.014583,0.026344,0.016048,0.028076,0.030773,0.012838,0.005283,0.002651,0.039128,0.035708,0.026892,0.033382,0.025769,0.006361,0.015488,0.01884,0.039297,0.014595,0.031404,0.002722,0.033916,0.028954,0.033022,0.021948,0.015856,0.029009,0.023697,0.0221,0.040863,0.029886,0.021666,0.035535,0.025988,0.028596,0.039447,0.03993,0.030945,0.042503],[0.025035,0.025884,0.028133,0.04517,0.016444,0.024904,0.025861,0.01969,0.019508,0.013373,0.017251,0.039592,0.001988,0.026008,0.02319,0.030651,0.038464,0.028171,0.030802,0.026784,0.004118,0.015042,0.005765,0.028753,0.030012,0.015416,0.018781,0.014583,0.154796,0.020839,0.01058,0.043704,0.032069,0.023813,0.023425,0.008913,0.026425,0.038494,0.022682,0.035552,0.034459,0.008029,0.011648,0.016264,0.031719,0.008709,0.026319,0.006009,0.035884,0.018822,0.037362,0.028382,0.023113,0.032649,0.026111,0.034843,0.039951,0.019041,0.022025,0.034118,0.026552,0.024496,0.0311,0.040149,0.031499,0.032352],[0.02072,0.022505,0.022867,0.031984,0.015803,0.021658,0.018464,0.018219,0.014793,0.007635,0.009815,0.019186,0.025901,0.028857,0.026781,0.020535,0.025332,0.012582,0.023193,0.022505,0.017007,0.022914,0.014634,0.018695,0.022686,0.029437,0.026999,0.026344,0.020839,0.11434,0.012156,0.019191,0.029455,0.010689,0.012818,0.008892,0.033036,0.023809,0.023254,0.028752,0.02342,0.006462,0.011764,0.015354,0.027475,0.008826,0.019939,0.005085,0.018968,0.037341,0.024277,0.018711,0.012897,0.025156,0.014794,0.021322,0.026533,0.021815,0.030875,0.037564,0.026207,0.03805,0.029224,0.030944,0.026881,0.026406],[0.025439,0.025676,0.023545,0.02226,0.016395,0.022388,0.031352,0.026469,0.022292,0.031446,0.012724,0.01733,0.012044,0.026273,0.017591,0.017999,0.016708,0.019829,0.016659,0.028989,0.018864,0.024549,0.018283,0.013303,0.021413,0.021876,0.027228,0.016048,0.01058,0.012156,0.06233,0.025561,0.026844,0.009363,0.012621,0.020584,0.019558,0.024975,0.025919,0.015578,0.017784,0.007317,0.021289,0.015786,0.027103,0.011466,0.025364,0.004391,0.021242,0.020883,0.018257,0.022156,0.014291,0.025081,0.022217,0.02192,0.027769,0.021887,0.025173,0.023868,0.013096,0.024766,0.028121,0.035296,0.02446,0.026366],[0.0498,0.049677,0.049578,0.055849,0.044007,0.033112,0.050101,0.039016,0.032749,0.021842,0.033648,0.07253,0.017335,0.053728,0.039441,0.064278,0.037741,0.044977,0.044431,0.052069,0.020924,0.043156,0.016002,0.044744,0.030289,0.030449,0.036412,0.028076,0.043704,0.019191,0.025561,0.124005,0.0531,0.038763,0.035884,0.01351,0.044268,0.059651,0.046423,0.055944,0.047081,0.011493,0.022548,0.031729,0.061219,0.022291,0.045051,0.009967,0.051767,0.028992,0.039437,0.05257,0.035039,0.058712,0.04765,0.055088,0.06176,0.031563,0.037473,0.043091,0.031637,0.052001,0.048878,0.04397,0.041584,0.051279],[0.054781,0.05497,0.056286,0.060355,0.042698,0.045945,0.051429,0.040852,0.028299,0.025885,0.033668,0.038106,0.031928,0.051287,0.050749,0.036833,0.041644,0.040955,0.043975,0.051413,0.020934,0.041615,0.014284,0.040562,0.036129,0.04603,0.051254,0.030773,0.032069,0.029455,0.026844,0.0531,0.156863,0.031276,0.023204,0.014149,0.058,0.063362,0.055465,0.06339,0.047418,0.016399,0.026276,0.039866,0.076674,0.019268,0.061876,0.007786,0.053509,0.044394,0.051141,0.056878,0.029244,0.064753,0.048278,0.051953,0.074162,0.033592,0.05422,0.070853,0.041294,0.064965,0.059033,0.066591,0.056724,0.05928],[0.02595,0.02172,0.02072,0.03478,0.021965,0.017563,0.019881,0.01668,0.020785,0.007984,0.025778,0.037206,0.014117,0.020628,0.017848,0.027104,0.021715,0.022856,0.020085,0.020585,0.010095,0.013299,0.010351,0.017876,0.009129,0.011772,0.018588,0.012838,0.023813,0.010689,0.009363,0.038763,0.031276,0.091913,0.016947,0.002733,0.021814,0.035375,0.015531,0.031392,0.033121,0.00845,0.011906,0.019512,0.028731,0.013042,0.030985,0.006218,0.038104,0.019075,0.02538,0.02878,0.022239,0.029467,0.025964,0.023584,0.028961,0.018723,0.011831,0.026005,0.023425,0.016409,0.028749,0.019863,0.021264,0.034013],[0.022622,0.025746,0.017074,0.019877,0.026532,0.015385,0.02597,0.017429,0.012972,0.01172,0.016675,0.036094,0.00095,0.023425,0.01063,0.030668,0.018177,0.020843,0.022306,0.018315,0.006517,0.019167,0.007809,0.032227,0.016017,0.013269,0.018977,0.005283,0.023425,0.012818,0.012621,0.035884,0.023204,0.016947,0.123186,0.00842,0.009166,0.026977,0.020687,0.024245,0.024293,0.009767,0.007625,0.022691,0.026757,0.013468,0.023215,0.007626,0.017031,0.015131,0.019823,0.023019,0.023629,0.021381,0.021608,0.021724,0.028679,0.013392,0.009929,0.012721,0.014185,0.021318,0.01755,0.023876,0.017079,0.026518],[0.016187,0.013855,0.012072,0.010771,0.010288,0.014588,0.010821,0.011784,0.010036,0.025043,0.004391,0.009226,0.005281,0.01732,0.007887,0.014467,0.0079,0.012572,0.010508,0.014578,0.01129,0.013728,0.017239,0.012458,0.018925,0.010704,0.019989,0.002651,0.008913,0.008892,0.020584,0.01351,0.014149,0.002733,0.00842,0.037986,0.011843,0.012247,0.011307,0.013933,0.01046,0.007445,0.016502,0.0111,0.009411,0.005777,0.01223,0.003107,0.010108,0.009822,0.008218,0.008356,0.006064,0.010049,0.012553,0.012523,0.015854,0.013886,0.012507,0.011145,0.007868,0.012772,0.01104,0.013997,0.014131,0.011317],[0.049423,0.054076,0.041783,0.053746,0.02286,0.036774,0.040023,0.03255,0.033702,0.021296,0.028076,0.031314,0.030018,0.050733,0.052573,0.032601,0.029581,0.029096,0.032102,0.047571,0.018627,0.031139,0.02398,0.027583,0.026852,0.032703,0.054794,0.039128,0.026425,0.033036,0.019558,0.044268,0.058,0.021814,0.009166,0.011843,0.174279,0.057349,0.042173,0.047192,0.04033,0.007512,0.023135,0.031926,0.067202,0.016772,0.0534,0.006915,0.048342,0.043083,0.036838,0.036808,0.021394,0.045944,0.038931,0.042359,0.065333,0.045626,0.041566,0.059208,0.038583,0.052666,0.039132,0.050716,0.04932,0.057976],[0.052592,0.061833,0.038275,0.053412,0.044389,0.038332,0.056681,0.045698,0.0295,0.02143,0.044097,0.046847,0.020843,0.058615,0.057261,0.046834,0.042568,0.056581,0.047515,0.050716,0.024243,0.041669,0.017981,0.037899,0.038476,0.03204,0.041192,0.035708,0.038494,0.023809,0.024975,0.059651,0.063362,0.035375,0.026977,0.012247,0.057349,0.148553,0.059003,0.052409,0.063156,0.011597,0.018996,0.032996,0.084637,0.022518,0.076746,0.008518,0.059575,0.038447,0.040763,0.077873,0.030201,0.08777,0.050972,0.061813,0.130195,0.036795,0.046965,0.051987,0.043682,0.057428,0.05668,0.070355,0.061489,0.069627],[0.042581,0.054601,0.04405,0.042087,0.038481,0.032537,0.05526,0.047471,0.034517,0.02041,0.028619,0.033558,0.012588,0.055694,0.048397,0.033774,0.027953,0.036056,0.036839,0.048587,0.017601,0.046916,0.013821,0.034525,0.033606,0.035824,0.031722,0.026892,0.022682,0.023254,0.025919,0.046423,0.055465,0.015531,0.020687,0.011307,0.042173,0.059003,0.104338,0.045494,0.040685,0.008167,0.023461,0.025042,0.069985,0.014068,0.050058,0.004191,0.043636,0.035451,0.034727,0.050848,0.022291,0.055898,0.04567,0.050199,0.072529,0.030978,0.045909,0.048253,0.031387,0.059885,0.036064,0.069427,0.068981,0.044791],[0.051901,0.046904,0.072512,0.055987,0.020814,0.034941,0.050977,0.03497,0.023452,0.019592,0.02892,0.050326,0.025824,0.048782,0.040288,0.048313,0.044353,0.032523,0.042756,0.047251,0.017985,0.034027,0.012985,0.061034,0.042965,0.03961,0.043348,0.033382,0.035552,0.028752,0.015578,0.055944,0.06339,0.031392,0.024245,0.013933,0.047192,0.052409,0.045494,0.168101,0.042721,0.016422,0.022866,0.033338,0.062298,0.020458,0.047705,0.010387,0.046799,0.042512,0.039689,0.044814,0.033562,0.049356,0.0407,0.048018,0.057428,0.032648,0.043435,0.056763,0.02806,0.047438,0.047888,0.046422,0.042803,0.054814],[0.041046,0.045949,0.034659,0.048825,0.003409,0.030739,0.044838,0.027401,0.028837,0.017419,0.034138,0.035694,0.01644,0.048569,0.044186,0.034363,0.038206,0.042946,0.035004,0.047549,0.008356,0.030014,0.013928,0.028858,0.027036,0.028265,0.028901,0.025769,0.034459,0.02342,0.017784,0.047081,0.047418,0.033121,0.024293,0.01046,0.04033,0.063156,0.040685,0.042721,0.117719,0.011113,0.016239,0.022864,0.053249,0.019831,0.053255,0.009588,0.044083,0.030143,0.037772,0.04611,0.024893,0.064629,0.038263,0.046928,0.064748,0.02917,0.032551,0.045172,0.032897,0.04872,0.039355,0.04323,0.042578,0.04651],[0.012585,0.008694,0.011465,0.010942,0.000811,0.011766,0.011165,0.008748,0.004182,0.004675,0.007556,0.010402,0.00179,0.01223,0.012935,0.014711,0.009746,0.006073,0.009807,0.014456,0.00932,0.008795,0.00195,0.010599,0.036574,0.017528,0.012572,0.006361,0.008029,0.006462,0.007317,0.011493,0.016399,0.00845,0.009767,0.007445,0.007512,0.011597,0.008167,0.016422,0.011113,0.054335,0.009128,0.028044,0.01507,0.008499,0.012708,0.007606,0.011525,0.038869,0.018078,0.00773,0.010251,0.010267,0.006886,0.012,0.011488,0.010681,-0.00035,0.013599,0.006409,-0.003859,0.005483,0.01454,0.005419,0.012685],[0.022503,0.022939,0.024438,0.024618,0.012666,0.018605,0.0251,0.022984,0.015846,0.025284,0.011889,0.020412,0.014075,0.019821,0.01718,0.019212,0.015131,0.011346,0.016101,0.026269,0.017213,0.017258,0.021863,0.018069,0.02187,0.020798,0.02753,0.015488,0.011648,0.011764,0.021289,0.022548,0.026276,0.011906,0.007625,0.016502,0.023135,0.018996,0.023461,0.022866,0.016239,0.009128,0.061809,0.017614,0.021062,0.01212,0.019784,0.004289,0.02293,0.021895,0.021308,0.01505,0.013827,0.018863,0.013874,0.018342,0.025341,0.022598,0.022226,0.027689,0.011855,0.023285,0.021972,0.027211,0.025856,0.030912],[0.02943,0.029524,0.029033,0.037396,0.023183,0.025147,0.026835,0.019223,0.014038,0.01811,0.018246,0.02537,0.011924,0.02837,0.029105,0.026362,0.016216,0.021291,0.020562,0.032128,0.016802,0.019808,0.010961,0.022374,0.036471,0.026318,0.035278,0.01884,0.016264,0.015354,0.015786,0.031729,0.039866,0.019512,0.022691,0.0111,0.031926,0.032996,0.025042,0.033338,0.022864,0.028044,0.017614,0.0943,0.038679,0.012785,0.031741,0.007088,0.02967,0.042319,0.03179,0.021881,0.021272,0.030152,0.021176,0.028184,0.034711,0.021015,0.018076,0.036499,0.028056,0.02986,0.03066,0.036125,0.034108,0.034599],[0.055624,0.067039,0.043985,0.054426,0.063606,0.038166,0.055846,0.05191,0.028135,0.020071,0.029928,0.047172,0.01649,0.060413,0.057696,0.043254,0.038193,0.0484,0.046616,0.058418,0.021622,0.042582,0.015186,0.03845,0.043126,0.047677,0.039886,0.039297,0.031719,0.027475,0.027103,0.061219,0.076674,0.028731,0.026757,0.009411,0.067202,0.084637,0.069985,0.062298,0.053249,0.01507,0.021062,0.038679,0.208963,0.025776,0.076685,0.009422,0.061086,0.047765,0.044596,0.059475,0.032343,0.077104,0.053311,0.060319,0.097204,0.045024,0.053326,0.045152,0.038929,0.070295,0.049485,0.077434,0.058903,0.066357],[0.016822,0.014017,0.017347,0.015983,0.021339,0.007948,0.01876,0.011408,0.014699,0.011277,0.013648,0.021416,0.005807,0.017502,0.01557,0.019571,0.011516,0.009473,0.015147,0.020956,0.009038,0.015104,0.008581,0.020812,0.018405,0.007634,0.014407,0.014595,0.008709,0.008826,0.011466,0.022291,0.019268,0.013042,0.013468,0.005777,0.016772,0.022518,0.014068,0.020458,0.019831,0.008499,0.01212,0.012785,0.025776,0.058511,0.020456,0.021355,0.015295,0.017515,0.013465,0.014512,0.014691,0.017117,0.011533,0.013675,0.021385,0.015894,0.013306,0.021491,0.009347,0.010234,0.018518,0.023591,0.013235,0.020395],[0.039991,0.047681,0.039503,0.049413,0.022447,0.030353,0.047073,0.03199,0.02617,0.021129,0.031855,0.031865,0.019908,0.04899,0.050551,0.03583,0.035163,0.041065,0.037974,0.045494,0.017302,0.036211,0.017447,0.032545,0.033239,0.029934,0.037445,0.031404,0.026319,0.019939,0.025364,0.045051,0.061876,0.030985,0.023215,0.01223,0.0534,0.076746,0.050058,0.047705,0.053255,0.012708,0.019784,0.031741,0.076685,0.020456,0.135647,0.006003,0.052168,0.034751,0.036697,0.046466,0.028427,0.061856,0.047095,0.048335,0.087006,0.030702,0.039155,0.056249,0.030124,0.052274,0.045629,0.070002,0.056263,0.061223],[0.007819,0.00344,0.008946,0.010229,0.005485,0.005533,0.0131,0.003156,0.006671,0.001718,0.006522,0.010914,0.01055,0.007654,0.005078,0.013236,0.007559,0.002973,0.010733,0.008479,0.005263,0.004202,-0.00073,0.011404,0.006913,0.002654,0.001784,0.002722,0.006009,0.005085,0.004391,0.009967,0.007786,0.006218,0.007626,0.003107,0.006915,0.008518,0.004191,0.010387,0.009588,0.007606,0.004289,0.007088,0.009422,0.021355,0.006003,0.040512,0.009277,0.009017,0.006379,0.00298,0.008685,0.007942,0.003164,0.009929,0.005197,0.010703,0.002941,0.010918,0.007875,0.000949,0.007955,0.007911,0.007357,0.009697],[0.041603,0.042494,0.042626,0.065788,0.029158,0.02482,0.0401,0.03645,0.025149,0.018321,0.028761,0.051512,0.021928,0.042577,0.038054,0.038702,0.035918,0.039517,0.04532,0.05089,0.023447,0.022895,0.020523,0.024735,0.037304,0.034092,0.038787,0.033916,0.035884,0.018968,0.021242,0.051767,0.053509,0.038104,0.017031,0.010108,0.048342,0.059575,0.043636,0.046799,0.044083,0.011525,0.02293,0.02967,0.061086,0.015295,0.052168,0.009277,0.155823,0.037872,0.04371,0.039804,0.029188,0.055822,0.044707,0.050098,0.066114,0.027267,0.033538,0.051525,0.025496,0.047461,0.037065,0.055787,0.048886,0.055894],[0.037185,0.039461,0.040724,0.038183,0.022393,0.037883,0.032816,0.025038,0.017737,0.017992,0.024206,0.026169,0.020779,0.029782,0.037211,0.029013,0.032177,0.022248,0.031426,0.03774,0.01817,0.022753,0.013776,0.019018,0.056005,0.047171,0.029512,0.028954,0.018822,0.037341,0.020883,0.028992,0.044394,0.019075,0.015131,0.009822,0.043083,0.038447,0.035451,0.042512,0.030143,0.038869,0.021895,0.042319,0.047765,0.017515,0.034751,0.009017,0.037872,0.158919,0.042102,0.027992,0.024288,0.032654,0.027025,0.035369,0.041432,0.042756,0.014758,0.035573,0.028865,0.030691,0.034401,0.040738,0.038521,0.040293],[0.040712,0.036273,0.033152,0.045303,0.026521,0.021194,0.032602,0.026906,0.022581,0.014895,0.021519,0.034777,0.014583,0.036876,0.036989,0.029408,0.028941,0.028995,0.030748,0.036677,0.018856,0.028175,0.016179,0.021807,0.027126,0.038726,0.036849,0.033022,0.037362,0.024277,0.018257,0.039437,0.051141,0.02538,0.019823,0.008218,0.036838,0.040763,0.034727,0.039689,0.037772,0.018078,0.021308,0.03179,0.044596,0.013465,0.036697,0.006379,0.04371,0.042102,0.159701,0.030228,0.024477,0.043144,0.035344,0.036159,0.04852,0.035149,0.026887,0.061117,0.048939,0.03634,0.040827,0.052798,0.039229,0.041344],[0.043165,0.04334,0.035934,0.041374,0.029353,0.032346,0.047094,0.039001,0.027956,0.019996,0.036862,0.034105,0.014385,0.049106,0.041416,0.039751,0.029267,0.046179,0.035186,0.039499,0.016528,0.037641,0.012341,0.032563,0.024645,0.024648,0.031781,0.021948,0.028382,0.018711,0.022156,0.05257,0.056878,0.02878,0.023019,0.008356,0.036808,0.077873,0.050848,0.044814,0.04611,0.00773,0.01505,0.021881,0.059475,0.014512,0.046466,0.00298,0.039804,0.027992,0.030228,0.121235,0.022988,0.078122,0.040532,0.050022,0.082767,0.025462,0.042857,0.044868,0.03121,0.052564,0.042427,0.049929,0.04639,0.040538],[0.029909,0.021995,0.026637,0.03283,0.01814,0.021742,0.024804,0.024273,0.015441,0.008479,0.016078,0.037778,0.008835,0.026399,0.020489,0.032596,0.021797,0.021004,0.019666,0.029464,0.009429,0.017612,0.010648,0.025084,0.020452,0.017,0.017829,0.015856,0.023113,0.012897,0.014291,0.035039,0.029244,0.022239,0.023629,0.006064,0.021394,0.030201,0.022291,0.033562,0.024893,0.010251,0.013827,0.021272,0.032343,0.014691,0.028427,0.008685,0.029188,0.024288,0.024477,0.022988,0.061681,0.028172,0.02101,0.027532,0.033775,0.018465,0.014427,0.028738,0.012253,0.022641,0.031068,0.027424,0.022339,0.024554],[0.047361,0.05413,0.036864,0.048079,0.042749,0.03778,0.048047,0.034328,0.028338,0.017709,0.041753,0.041343,0.018199,0.05626,0.04949,0.042785,0.036401,0.053377,0.040879,0.046636,0.017488,0.040368,0.014675,0.035494,0.028912,0.031965,0.035172,0.029009,0.032649,0.025156,0.025081,0.058712,0.064753,0.029467,0.021381,0.010049,0.045944,0.08777,0.055898,0.049356,0.064629,0.010267,0.018863,0.030152,0.077104,0.017117,0.061856,0.007942,0.055822,0.032654,0.043144,0.078122,0.028172,0.12799,0.04655,0.056774,0.095511,0.034051,0.034403,0.052446,0.027933,0.055368,0.048226,0.057031,0.053623,0.059183],[0.034808,0.046629,0.036413,0.046206,0.022647,0.025677,0.044202,0.027657,0.025715,0.018427,0.027522,0.034118,0.013993,0.045695,0.038828,0.035338,0.024043,0.040382,0.033617,0.041109,0.014522,0.032765,0.017126,0.035244,0.027584,0.02589,0.027205,0.023697,0.026111,0.014794,0.022217,0.04765,0.048278,0.025964,0.021608,0.012553,0.038931,0.050972,0.04567,0.0407,0.038263,0.006886,0.013874,0.021176,0.053311,0.011533,0.047095,0.003164,0.044707,0.027025,0.035344,0.040532,0.02101,0.04655,0.116366,0.048083,0.055787,0.023297,0.034054,0.033712,0.016883,0.046162,0.03648,0.043149,0.041944,0.040434],[0.043628,0.052851,0.042951,0.055488,0.020309,0.033578,0.04929,0.040807,0.025888,0.022129,0.031973,0.039829,0.018517,0.051102,0.038433,0.0408,0.037341,0.039722,0.043606,0.049531,0.019551,0.037437,0.014449,0.030671,0.034574,0.029117,0.035943,0.0221,0.034843,0.021322,0.02192,0.055088,0.051953,0.023584,0.021724,0.012523,0.042359,0.061813,0.050199,0.048018,0.046928,0.012,0.018342,0.028184,0.060319,0.013675,0.048335,0.009929,0.050098,0.035369,0.036159,0.050022,0.027532,0.056774,0.048083,0.087916,0.064466,0.028978,0.037965,0.046113,0.033973,0.051376,0.037609,0.050008,0.049235,0.044967],[0.057152,0.070845,0.043024,0.055299,0.046264,0.041696,0.058115,0.049589,0.028136,0.025016,0.044999,0.045633,0.019482,0.064662,0.061137,0.04988,0.043798,0.057333,0.051494,0.059437,0.025841,0.047164,0.018673,0.046225,0.039194,0.043168,0.047813,0.040863,0.039951,0.026533,0.027769,0.06176,0.074162,0.028961,0.028679,0.015854,0.065333,0.130195,0.072529,0.057428,0.064748,0.011488,0.025341,0.034711,0.097204,0.021385,0.087006,0.005197,0.066114,0.041432,0.04852,0.082767,0.033775,0.095511,0.055787,0.064466,0.179405,0.037973,0.056544,0.059944,0.044015,0.06588,0.060035,0.074333,0.073748,0.076953],[0.034676,0.028046,0.029838,0.034744,0.030197,0.021916,0.034551,0.02262,0.026317,0.019028,0.019328,0.022515,0.014587,0.036602,0.02671,0.032249,0.022391,0.02626,0.025056,0.030556,0.015962,0.029621,0.016799,0.021482,0.023168,0.025509,0.028711,0.029886,0.019041,0.021815,0.021887,0.031563,0.033592,0.018723,0.013392,0.013886,0.045626,0.036795,0.030978,0.032648,0.02917,0.010681,0.022598,0.021015,0.045024,0.015894,0.030702,0.010703,0.027267,0.042756,0.035149,0.025462,0.018465,0.034051,0.023297,0.028978,0.037973,0.128262,0.020945,0.037267,0.023817,0.034357,0.029555,0.047605,0.032941,0.041672],[0.03584,0.04167,0.035774,0.036468,0.015223,0.036527,0.03667,0.033132,0.02541,0.025084,0.01933,0.025625,0.019552,0.036871,0.036276,0.024131,0.030744,0.022585,0.02829,0.029076,0.018233,0.041716,0.017185,0.033963,0.019365,0.028665,0.032277,0.021666,0.022025,0.030875,0.025173,0.037473,0.05422,0.011831,0.009929,0.012507,0.041566,0.046965,0.045909,0.043435,0.032551,-0.00035,0.022226,0.018076,0.053326,0.013306,0.039155,0.002941,0.033538,0.014758,0.026887,0.042857,0.014427,0.034403,0.034054,0.037965,0.056544,0.020945,0.202925,0.069808,0.032976,0.079931,0.048001,0.066257,0.056387,0.042617],[0.052597,0.043501,0.044556,0.062259,0.022747,0.039053,0.039493,0.050913,0.030195,0.019572,0.028165,0.033936,0.034247,0.050592,0.05183,0.034811,0.053388,0.040897,0.028129,0.049533,0.024438,0.034097,0.015804,0.043939,0.041011,0.033862,0.053496,0.035535,0.034118,0.037564,0.023868,0.043091,0.070853,0.026005,0.012721,0.011145,0.059208,0.051987,0.048253,0.056763,0.045172,0.013599,0.027689,0.036499,0.045152,0.021491,0.056249,0.010918,0.051525,0.035573,0.061117,0.044868,0.028738,0.052446,0.033712,0.046113,0.059944,0.037267,0.069808,0.363682,0.063605,0.069077,0.049077,0.071197,0.068933,0.059765],[0.039593,0.034238,0.030183,0.039851,0.005898,0.026441,0.032754,0.027803,0.016283,0.013393,0.023024,0.025082,0.01659,0.035185,0.029769,0.033358,0.027479,0.026282,0.018944,0.023388,0.017555,0.027228,0.009902,0.02142,0.027125,0.020257,0.036963,0.025988,0.026552,0.026207,0.013096,0.031637,0.041294,0.023425,0.014185,0.007868,0.038583,0.043682,0.031387,0.02806,0.032897,0.006409,0.011855,0.028056,0.038929,0.009347,0.030124,0.007875,0.025496,0.028865,0.048939,0.03121,0.012253,0.027933,0.016883,0.033973,0.044015,0.023817,0.032976,0.063605,0.294675,0.041417,0.035838,0.04987,0.045443,0.043087],[0.050436,0.051741,0.049503,0.063463,0.029832,0.03924,0.039578,0.039845,0.040162,0.027132,0.032806,0.032876,0.037476,0.053272,0.047435,0.034263,0.031131,0.040638,0.038864,0.049561,0.022314,0.047314,0.020478,0.03742,0.030958,0.037106,0.043604,0.028596,0.024496,0.03805,0.024766,0.052001,0.064965,0.016409,0.021318,0.012772,0.052666,0.057428,0.059885,0.047438,0.04872,-0.003859,0.023285,0.02986,0.070295,0.010234,0.052274,0.000949,0.047461,0.030691,0.03634,0.052564,0.022641,0.055368,0.046162,0.051376,0.06588,0.034357,0.079931,0.069077,0.041417,0.239844,0.068574,0.057669,0.074929,0.070405],[0.043696,0.037812,0.04514,0.055891,0.034946,0.034795,0.030378,0.026738,0.024597,0.011571,0.023211,0.036776,0.031848,0.039826,0.041848,0.033229,0.032024,0.031353,0.028605,0.048508,0.031255,0.035872,0.016346,0.031413,0.027042,0.044591,0.041745,0.039447,0.0311,0.029224,0.028121,0.048878,0.059033,0.028749,0.01755,0.01104,0.039132,0.05668,0.036064,0.047888,0.039355,0.005483,0.021972,0.03066,0.049485,0.018518,0.045629,0.007955,0.037065,0.034401,0.040827,0.042427,0.031068,0.048226,0.03648,0.037609,0.060035,0.029555,0.048001,0.049077,0.035838,0.068574,0.222553,0.063658,0.045324,0.070529],[0.047265,0.04936,0.047953,0.05618,0.033224,0.039939,0.04806,0.045011,0.041102,0.025007,0.027017,0.034961,0.016789,0.045048,0.043126,0.042398,0.024807,0.03957,0.039504,0.060991,0.040805,0.042117,0.020792,0.028983,0.034773,0.032316,0.043551,0.03993,0.040149,0.030944,0.035296,0.04397,0.066591,0.019863,0.023876,0.013997,0.050716,0.070355,0.069427,0.046422,0.04323,0.01454,0.027211,0.036125,0.077434,0.023591,0.070002,0.007911,0.055787,0.040738,0.052798,0.049929,0.027424,0.057031,0.043149,0.050008,0.074333,0.047605,0.066257,0.071197,0.04987,0.057669,0.063658,0.338833,0.103208,0.059732],[0.044253,0.04381,0.041138,0.051202,0.038226,0.039507,0.040343,0.03647,0.027585,0.023895,0.028715,0.032008,0.022238,0.051385,0.04816,0.036964,0.032776,0.036311,0.041266,0.056545,0.023056,0.041389,0.015854,0.026483,0.033645,0.032065,0.04072,0.030945,0.031499,0.026881,0.02446,0.041584,0.056724,0.021264,0.017079,0.014131,0.04932,0.061489,0.068981,0.042803,0.042578,0.005419,0.025856,0.034108,0.058903,0.013235,0.056263,0.007357,0.048886,0.038521,0.039229,0.04639,0.022339,0.053623,0.041944,0.049235,0.073748,0.032941,0.056387,0.068933,0.045443,0.074929,0.045324,0.103208,0.186815,0.058042],[0.046787,0.046573,0.047738,0.056414,0.032108,0.043787,0.042855,0.044946,0.028587,0.024524,0.035273,0.037229,0.032874,0.045284,0.049318,0.04245,0.037517,0.040426,0.036479,0.055244,0.025001,0.033499,0.027814,0.040554,0.033426,0.038499,0.051831,0.042503,0.032352,0.026406,0.026366,0.051279,0.05928,0.034013,0.026518,0.011317,0.057976,0.069627,0.044791,0.054814,0.04651,0.012685,0.030912,0.034599,0.066357,0.020395,0.061223,0.009697,0.055894,0.040293,0.041344,0.040538,0.024554,0.059183,0.040434,0.044967,0.076953,0.041672,0.042617,0.059765,0.043087,0.070405,0.070529,0.059732,0.058042,0.243231]],"rf":0.0675};
+const UNIVERSE = prepareUniverse(UNIVERSE_RAW);
+
+/* =========================================================================
+   EMBEDDED REAL RESPONDENTS -- the group's own 5 submitted results, trimmed
+   to the fields the dashboard/table actually use (name, anchors, scale
+   scores, BFI-2 domains, posterior, retest consistency). Embedded so the
+   "full project walkthrough" (evaluate) view can render the complete group
+   dashboard with no file upload, for sharing with the professor or anyone
+   else who wants to see the whole pipeline without taking the survey or
+   collecting files themselves. Source: real_peer_data/*.json in the Python
+   pipeline; correctness verified against those files before embedding.
+   ========================================================================= */
+const EMBEDDED_RESPONDENTS = [{"name":"Adwaaiit Pande","generalRisk":10,"generalPatience":4,"grableLytton":{"total":40,"level":"High"},"dospertFinancial":{"investingMean":4.666666666666667,"gamblingMean":4.333333333333333},"bfi2":{"domains":{"Extraversion":3.75,"Agreeableness":3.58,"Conscientiousness":3.75,"Negative Emotionality":2.75,"Open-Mindedness":3.83}},"posterior":{"gamma":{"mean":2.273,"ci90":[1.6,3]},"lam":{"mean":1.015,"ci90":[1,1]},"alpha_w":{"mean":1.29,"ci90":[1,1.4]},"beta_hyp":{"mean":0.963,"ci90":[0.8,1]},"delta":{"mean":0.987,"ci90":[0.94,1]}},"retestConsistency":1},{"name":"Ayushi","generalRisk":7,"generalPatience":7,"grableLytton":{"total":35,"level":"High"},"dospertFinancial":{"investingMean":6.333333333333333,"gamblingMean":4.333333333333333},"bfi2":{"domains":{"Extraversion":3.5,"Agreeableness":3.5,"Conscientiousness":3.33,"Negative Emotionality":3,"Open-Mindedness":4}},"posterior":{"gamma":{"mean":2.294,"ci90":[1.6,3]},"lam":{"mean":1.009,"ci90":[1,1]},"alpha_w":{"mean":1.138,"ci90":[0.8,1.4]},"beta_hyp":{"mean":0.726,"ci90":[0.5,1]},"delta":{"mean":0.948,"ci90":[0.9,1]}},"retestConsistency":0.5},{"name":"Kartika","generalRisk":4,"generalPatience":7,"grableLytton":{"total":31,"level":"Above-average"},"dospertFinancial":{"investingMean":4.666666666666667,"gamblingMean":6.666666666666667},"bfi2":{"domains":{"Extraversion":3.75,"Agreeableness":3.67,"Conscientiousness":2.83,"Negative Emotionality":2.17,"Open-Mindedness":3.17}},"posterior":{"gamma":{"mean":0.2,"ci90":[0.2,0.2]},"lam":{"mean":1,"ci90":[1,1]},"alpha_w":{"mean":1,"ci90":[1,1]},"beta_hyp":{"mean":0.9,"ci90":[0.9,0.9]},"delta":{"mean":0.93,"ci90":[0.92,0.94]}},"retestConsistency":1},{"name":"Kshitij","generalRisk":3,"generalPatience":6,"grableLytton":{"total":31,"level":"Above-average"},"dospertFinancial":{"investingMean":5,"gamblingMean":5},"bfi2":{"domains":{"Extraversion":3.42,"Agreeableness":2.92,"Conscientiousness":2.92,"Negative Emotionality":3,"Open-Mindedness":2.5}},"posterior":{"gamma":{"mean":-0.5,"ci90":[-0.5,-0.5]},"lam":{"mean":1.6,"ci90":[1.6,1.6]},"alpha_w":{"mean":0.4,"ci90":[0.4,0.4]},"beta_hyp":{"mean":0.6,"ci90":[0.5,0.7]},"delta":{"mean":0.9,"ci90":[0.9,0.9]}},"retestConsistency":1},{"name":"Shree Charan","generalRisk":7,"generalPatience":7,"grableLytton":{"total":27,"level":"Average/moderate"},"dospertFinancial":{"investingMean":7,"gamblingMean":7},"bfi2":{"domains":{"Extraversion":3,"Agreeableness":3,"Conscientiousness":3,"Negative Emotionality":3,"Open-Mindedness":3}},"posterior":{"gamma":{"mean":2.3,"ci90":[1.6,3]},"lam":{"mean":1,"ci90":[1,1]},"alpha_w":{"mean":0.505,"ci90":[0.4,1]},"beta_hyp":{"mean":0.799,"ci90":[0.5,1]},"delta":{"mean":0.946,"ci90":[0.9,1]}},"retestConsistency":1}];
+
+/* =========================================================================
+   PORTFOLIO — EUT (Expected Utility Theory) and SP/A-BPT (Behavioral
+   Portfolio Theory / mental accounts) construction, ported faithfully from
+   robo_advisory/portfolio/{eut,bpt}.py. Operates on the REAL 66-stock
+   Markowitz Portfolio Project asset universe (mu, Sigma, rf), embedded as
+   UNIVERSE_DATA below (see real_asset_universe_standard_lambda/meta.json
+   in the Python pipeline for full derivation and disclosure).
+   ========================================================================= */
+
+// ---- Linear algebra: Cholesky decomposition + solve (Sigma is symmetric PD) ----
+function cholesky(A) {
+  const n = A.length;
+  const L = Array.from({ length: n }, () => new Float64Array(n));
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j <= i; j++) {
+      let sum = 0;
+      for (let k = 0; k < j; k++) sum += L[i][k] * L[j][k];
+      if (i === j) {
+        const val = A[i][i] - sum;
+        L[i][j] = Math.sqrt(Math.max(val, 1e-14));
+      } else {
+        L[i][j] = (A[i][j] - sum) / L[j][j];
+      }
+    }
+  }
+  return L;
+}
+function choleskySolve(L, b) {
+  const n = L.length;
+  const y = new Float64Array(n);
+  for (let i = 0; i < n; i++) {
+    let sum = b[i];
+    for (let k = 0; k < i; k++) sum -= L[i][k] * y[k];
+    y[i] = sum / L[i][i];
+  }
+  const x = new Float64Array(n);
+  for (let i = n - 1; i >= 0; i--) {
+    let sum = y[i];
+    for (let k = i + 1; k < n; k++) sum -= L[k][i] * x[k];
+    x[i] = sum / L[i][i];
+  }
+  return x;
+}
+function matVec(A, v) {
+  const n = A.length;
+  const out = new Float64Array(n);
+  for (let i = 0; i < n; i++) {
+    let s = 0;
+    const row = A[i];
+    for (let j = 0; j < n; j++) s += row[j] * v[j];
+    out[i] = s;
+  }
+  return out;
+}
+function dot(a, b) {
+  let s = 0;
+  for (let i = 0; i < a.length; i++) s += a[i] * b[i];
+  return s;
+}
+
+/* ---- Model version 2 settings (identical to pipeline.py) -------------------
+   POSITION_CAP : no single stock above 10% in any equity sleeve
+   SAFETY_FLOOR / SAFETY_ALPHA : the BPT safety account may lose money (return
+   below 0%) in at most 5% of years -- Telser's (1955) safety-first rule.   */
+const POSITION_CAP = 0.10;
+const SAFETY_FLOOR = 0.0;
+const SAFETY_ALPHA = 0.05;
+const Z_95 = 1.6448536269514722;   // standard-normal quantile for SAFETY_ALPHA = 5%
+
+function normCdf(x) {               // Abramowitz & Stegun 7.1.26, |error| < 1.5e-7
+  const t = 1 / (1 + 0.3275911 * Math.abs(x) / Math.SQRT2);
+  const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t *
+    Math.exp(-x * x / 2);
+  return x >= 0 ? 0.5 * (1 + y) : 0.5 * (1 - y);
+}
+function probBelow(mean, vol, floor = 0) { return vol <= 0 ? (mean >= floor ? 0 : 1) : normCdf((floor - mean) / vol); }
+
+/**
+ * Long-only, fully-invested weights with a per-stock cap that maximise
+ *     (w'mu - H) / sqrt(w'Sigma w)   s.t. sum(w) = 1, 0 <= w_i <= cap.
+ * H = rf gives the capped tangency (max-Sharpe) portfolio; H = an aspiration
+ * level gives Roy's (1952) safety-first portfolio for that level.
+ *
+ * The ratio problem is turned into a convex QP by the Charnes-Cooper
+ * substitution y = w / k (the same reformulation eut.py uses):
+ *     minimise y'Sigma y   s.t.  (mu - H)'y = 1,  y >= 0,  cap*sum(y) - y_i >= 0,
+ * and solved here with an OSQP-style ADMM iteration (one Cholesky factorisation,
+ * then cheap iterations until primal and dual residuals fall below 1e-10).
+ * Python solves the same QP with SLSQP; test_portfolio_parity.js checks that
+ * both give the same weights, returns and volatilities.
+ */
+function cappedRatioWeights(mu, Sigma, H, cap, maxIter = 40000) {
+  const n = mu.length, a = mu.map((m) => m - H), m = 1 + 2 * n;
+  const rho = new Float64Array(m).fill(1.0); rho[0] = 1e3;      // stiffer on the equality row
+  const sig = 1e-6, relax = 1.6;
+  const Amul = (x) => {
+    const z = new Float64Array(m); z[0] = dot(a, x);
+    let s = 0; for (let i = 0; i < n; i++) s += x[i];
+    for (let i = 0; i < n; i++) { z[1 + i] = x[i]; z[1 + n + i] = cap * s - x[i]; }
+    return z;
+  };
+  const ATmul = (v) => {
+    const x = new Float64Array(n);
+    let t = 0; for (let i = 0; i < n; i++) t += v[1 + n + i];
+    for (let i = 0; i < n; i++) x[i] = a[i] * v[0] + v[1 + i] + cap * t - v[1 + n + i];
+    return x;
+  };
+  const K = Array.from({ length: n }, (_, i) => Array.from({ length: n }, (_, j) => {
+    let v = 2 * Sigma[i][j] + rho[0] * a[i] * a[j] + (i === j ? sig + rho[1 + i] : 0);
+    for (let k = 0; k < n; k++) v += rho[1 + n + k] * (cap - (i === k ? 1 : 0)) * (cap - (j === k ? 1 : 0));
+    return v;
+  }));
+  const L = cholesky(K);
+  const lo = new Float64Array(m), hi = new Float64Array(m).fill(Infinity); lo[0] = 1; hi[0] = 1;
+  let x = new Float64Array(n).fill(1 / n), z = Amul(x);
+  const y = new Float64Array(m);
+  for (let it = 0; it < maxIter; it++) {
+    const r = new Float64Array(m); for (let k = 0; k < m; k++) r[k] = rho[k] * z[k] - y[k];
+    const at = ATmul(r);
+    const xt = choleskySolve(L, x.map((xi, i) => sig * xi + at[i]));
+    const zt = Amul(xt);
+    const xn = xt.map((v, i) => relax * v + (1 - relax) * x[i]);
+    const zr = zt.map((v, k) => relax * v + (1 - relax) * z[k]);
+    const zn = new Float64Array(m);
+    for (let k = 0; k < m; k++) zn[k] = Math.min(Math.max(zr[k] + y[k] / rho[k], lo[k]), hi[k]);
+    for (let k = 0; k < m; k++) y[k] += rho[k] * (zr[k] - zn[k]);
+    let done = false;
+    if (it % 200 === 199) {
+      const Ax = Amul(xn); let rp = 0;
+      for (let k = 0; k < m; k++) rp = Math.max(rp, Math.abs(Ax[k] - zn[k]));
+      const ad = ATmul(zn.map((v, k) => rho[k] * (v - z[k]))); let rd = 0;
+      for (let i = 0; i < n; i++) rd = Math.max(rd, Math.abs(ad[i]));
+      done = rp < 1e-10 && rd < 1e-10;
+    }
+    x = xn; z = zn;
+    if (done) break;
+  }
+  let w = Array.from(x, (v) => Math.max(v, 0));
+  let s = w.reduce((p, q) => p + q, 0);
+  w = w.map((v) => Math.min(v / s, cap));            // tidy numerical dust only
+  s = w.reduce((p, q) => p + q, 0);
+  return w.map((v) => v / s);
+}
+
+function portfolioStats(w, mu, Sigma) {
+  return { ret: dot(w, mu), vol: Math.sqrt(Math.max(dot(w, matVec(Sigma, w)), 0)) };
+}
+
+function safetyCapitalFractionFromLambda(lam, lamLo = 1.0, lamHi = 4.0, fracLo = 0.3, fracHi = 0.8) {
+  let t = (lam - lamLo) / (lamHi - lamLo);
+  t = Math.min(Math.max(t, 0), 1);
+  return fracLo + t * (fracHi - fracLo);
+}
+
+function percentile(arr, p) {
+  const sorted = [...arr].sort((a, b) => a - b);
+  const idx = (p / 100) * (sorted.length - 1);
+  const lo = Math.floor(idx), hi = Math.ceil(idx);
+  if (lo === hi) return sorted[lo];
+  return sorted[lo] + (sorted[hi] - sorted[lo]) * (idx - lo);
+}
+
+/**
+ * Client-independent building blocks, computed once per universe (cached):
+ *   T  : capped tangency portfolio (EUT risky sleeve, and the equity part of
+ *        the BPT safety account)
+ *   e* : Telser equity share of the safety account,
+ *        e* = min(1, (rf - floor) / (z * sigma_T - (mu_T - rf)))
+ *   A  : capped Roy aspiration portfolio for H_a = 75th percentile of mu
+ * Mirrors bpt.py's bpt_layers().
+ */
+function universeLayers(universe) {
+  if (universe._layers) return universe._layers;
+  const { mu, Sigma, rf } = universe;
+  const wT = cappedRatioWeights(mu, Sigma, rf, POSITION_CAP);
+  const T = portfolioStats(wT, mu, Sigma);
+  const denom = Z_95 * T.vol - (T.ret - rf);
+  const e = rf < SAFETY_FLOOR ? 0 : (denom <= 0 ? 1 : Math.min(Math.max((rf - SAFETY_FLOOR) / denom, 0), 1));
+  const Ha = percentile(mu, 75);
+  const wA = cappedRatioWeights(mu, Sigma, Ha, POSITION_CAP);
+  const A = portfolioStats(wA, mu, Sigma);
+  universe._layers = {
+    wT, T, safetyEquityShare: e,
+    safety: { ret: rf + e * (T.ret - rf), vol: e * T.vol },
+    wA, A, aspirationThreshold: Ha,
+  };
+  return universe._layers;
+}
+
+function eutAllocation(universe, gamma) {
+  gamma = Math.max(gamma, 0.05); // EUT two-fund formula requires gamma>0
+  const { rf } = universe;
+  const Ly = universeLayers(universe);
+  const tangencyExcessReturn = Ly.T.ret - rf;
+  const tangencyVar = Ly.T.vol * Ly.T.vol;
+  const riskyFractionUnclipped = tangencyExcessReturn / (gamma * tangencyVar);
+  const riskyFraction = Math.min(Math.max(riskyFractionUnclipped, 0), 1); // long-only, no leverage
+  const expectedReturn = rf + riskyFraction * tangencyExcessReturn;
+  const volatility = riskyFraction * Ly.T.vol;
+  return {
+    riskyWeights: Ly.wT,
+    riskyFraction,
+    riskyFractionUnclipped,
+    cashFraction: 1 - riskyFraction,
+    expectedReturn, volatility,
+    probLoss: probBelow(expectedReturn, volatility),
+  };
+}
+
+function bptAllocation(universe, safetyCapitalFrac, lossAversion) {
+  const { mu, Sigma, rf } = universe;
+  const Ly = universeLayers(universe);
+  const s = safetyCapitalFrac, e = Ly.safetyEquityShare;
+  const gsecWeight = s * (1 - e);
+  const combinedWeights = Ly.wT.map((wt, i) => s * e * wt + (1 - s) * Ly.wA[i]);   // stocks, share of total wealth
+  const combinedReturn = gsecWeight * rf + dot(combinedWeights, mu);
+  const combinedVol = Math.sqrt(Math.max(dot(combinedWeights, matVec(Sigma, combinedWeights)), 0));
+  return {
+    safetyLayer: { equityShare: e, gsecShare: 1 - e, expectedReturn: Ly.safety.ret, volatility: Ly.safety.vol },
+    aspirationLayer: { weights: Ly.wA, expectedReturn: Ly.A.ret, volatility: Ly.A.vol, threshold: Ly.aspirationThreshold,
+      nNames: Ly.wA.filter((w) => w > 1e-4).length },
+    safetyCapitalFrac: s, gsecWeight, equityWeight: 1 - gsecWeight,
+    combinedWeights, combinedExpectedReturn: combinedReturn, combinedVolatility: combinedVol,
+    probLoss: probBelow(combinedReturn, combinedVol),
+    lossAversionUsed: lossAversion,
+  };
+}
+
+/**
+ * Full personalized portfolio construction for one respondent's pooled
+ * (gamma, lambda), against the embedded real asset universe. Mirrors
+ * pipeline.py's _construct_portfolios exactly (model version 2).
+ */
+function constructPortfolios(universe, gamma, lam) {
+  const eut = eutAllocation(universe, gamma);
+  const bpt = bptAllocation(universe, safetyCapitalFractionFromLambda(lam), lam);
+  return { eut, bpt, gamma, lam };
+}
+
+function prepareUniverse(raw) {
+  return { tickers: raw.tickers, mu: raw.mu, Sigma: raw.sigma, rf: raw.rf };
+}
+
+
+/* =========================================================================
+   COMMENTARY — Step 6, rule-based. Mirrors pipeline.py's build_commentary()
+   (Negative-Emotionality-vs-loss-aversion consistency check) plus a second
+   check this project's real data motivated: self-reported risk tolerance
+   vs. the adaptively-elicited gamma can diverge (seen in this project's own
+   collected responses), which is itself informative for how an advisor
+   should talk to this client, not just what to put in their portfolio.
+   ========================================================================= */
+function negativeEmotionalityFlag(domains, threshold = 3.5) {
+  return (domains["Negative Emotionality"] || 0) >= threshold;
+}
+function buildCommentary(gamma, lam, domains, generalRisk) {
+  const notes = [];
+  const ne = domains ? domains["Negative Emotionality"] : undefined;
+  if (domains && negativeEmotionalityFlag(domains) && lam < 1.8) {
+    notes.push(`Negative Emotionality is elevated (${ne.toFixed(2)}/5) but loss aversion is comparatively low (λ=${lam.toFixed(2)}). Worth re-examining the elicitation rather than trusting either number in isolation.`);
+  } else if (domains && negativeEmotionalityFlag(domains)) {
+    notes.push(`Negative Emotionality is elevated (${ne.toFixed(2)}/5), consistent with the elevated loss aversion (λ=${lam.toFixed(2)}). Recommend more reassurance framing and explicit drawdown communication for the safety account.`);
+  } else if (domains) {
+    notes.push("No BFI-2 / structural-parameter inconsistency flagged.");
+  }
+  if (generalRisk != null && gamma != null) {
+    if (generalRisk >= 8 && gamma >= 1.8) {
+      notes.push(`Self-reported risk tolerance is high (${generalRisk}/10) but the adaptively-elicited risk aversion (γ=${gamma.toFixed(2)}) sits in a moderately risk-averse band — self-report and revealed preference disagree here. Worth a follow-up conversation before finalizing the recommendation, rather than defaulting to either number alone.`);
+    } else if (generalRisk <= 3 && gamma <= 0.5) {
+      notes.push(`Self-reported risk tolerance is low (${generalRisk}/10) but the adaptively-elicited γ=${gamma.toFixed(2)} suggests low or negative risk aversion — also worth a follow-up conversation.`);
+    }
+  }
+  return notes;
+}
+
+
+function fmtPct(x) { return `${(x * 100).toFixed(1)}%`; }
+function fmtPct2(x) { return `${(x * 100).toFixed(2)}%`; }
+
+/**
+ * Renders the "your recommended portfolio" section: EUT vs SP/A-BPT,
+ * top holdings, and Step 6 personality-linked commentary. Used both on the
+ * individual "done" screen (own posterior mean, unpooled) and in the
+ * researcher group dashboard (hierarchical-pooled, see poolGroup()).
+ */
+
+/* ---- Step 4 graphical representation: utility, value, probability-weighting
+   and discount curves as inline SVG, using exactly the functional forms the
+   elicitation engine scores choices with (value exponent floored at 0.05). ---- */
+const CURVE_COLORS = ["#4D62EF", "#FD4C00", "#12A385", "#CA54FB", "#D69E00"];
+// colour follows the person (same as the written report and deck), never list position
+const NAME_COLORS = { "Shree Charan": "#4D62EF", "Kshitij": "#FD4C00", "Kartika": "#12A385", "Ayushi": "#CA54FB", "Adwaaiit Pande": "#D69E00" };
+let _svgClipId = 0;
+function crraU(W, g) { return Math.abs(1 - g) < 1e-9 ? Math.log(W) : (Math.pow(W, 1 - g) - 1) / (1 - g); }
+function ptValue(x, g, lam) { const e = Math.max(1 - g, 0.05); return x >= 0 ? Math.pow(Math.abs(x), e) : -lam * Math.pow(Math.abs(x), e); }
+function prelecW(p, a) { return Math.exp(-Math.pow(-Math.log(p), a)); }
+function qhD(t, b, d) { return t > 0 ? b * Math.pow(d, t / 30) : 1; }
+function linspace(a, b, n) { const out = []; for (let i = 0; i < n; i++) out.push(a + (b - a) * i / (n - 1)); return out; }
+
+function svgChart(o) {
+  const W = 340, H = 230, m = { l: 44, r: 12, t: 34, b: 40 };
+  const pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const sx = (x) => m.l + (x - o.xMin) / (o.xMax - o.xMin) * pw;
+  const sy = (y) => m.t + (1 - (y - o.yMin) / (o.yMax - o.yMin)) * ph;
+  const cid = "clip" + (++_svgClipId);
+  let g = `<defs><clipPath id="${cid}"><rect x="${m.l}" y="${m.t}" width="${pw}" height="${ph}"/></clipPath></defs>`;
+  g += `<text x="${m.l}" y="14" font-size="12.5" font-weight="600" fill="var(--ink)">${o.title}</text>`;
+  g += `<text x="${m.l}" y="27" font-size="10.5" font-style="italic" fill="var(--ink-soft)">${o.formula}</text>`;
+  o.yTicks.forEach((t) => { g += `<line x1="${m.l}" x2="${m.l + pw}" y1="${sy(t)}" y2="${sy(t)}" stroke="var(--rule, #d9d4c7)" stroke-width="0.6"/><text x="${m.l - 5}" y="${sy(t) + 3.5}" font-size="10" text-anchor="end" fill="var(--ink-soft)">${t}</text>`; });
+  o.xTicks.forEach((t) => { g += `<text x="${sx(t)}" y="${m.t + ph + 14}" font-size="10" text-anchor="middle" fill="var(--ink-soft)">${t}</text>`; });
+  (o.refLines || []).forEach((r) => {
+    if (r.x !== undefined) g += `<line x1="${sx(r.x)}" x2="${sx(r.x)}" y1="${m.t}" y2="${m.t + ph}" stroke="var(--ink-soft)" stroke-width="0.8" ${r.dash ? 'stroke-dasharray="3 3"' : ""}/>`;
+    if (r.y !== undefined) g += `<line x1="${m.l}" x2="${m.l + pw}" y1="${sy(r.y)}" y2="${sy(r.y)}" stroke="var(--ink-soft)" stroke-width="0.8" ${r.dash ? 'stroke-dasharray="3 3"' : ""}/>`;
+    if (r.diag) g += `<line x1="${sx(o.xMin)}" y1="${sy(o.yMin)}" x2="${sx(o.xMax)}" y2="${sy(o.yMax)}" stroke="var(--ink-soft)" stroke-width="0.9" stroke-dasharray="4 3"/>`;
+  });
+  g += `<g clip-path="url(#${cid})">`;
+  o.series.forEach((s) => {
+    s.segments.forEach((seg) => {
+      const d = seg.filter((pt) => isFinite(pt[1])).map((pt, i) => `${i ? "L" : "M"}${sx(pt[0]).toFixed(1)},${sy(Math.max(o.yMin - 1, Math.min(o.yMax + 1, pt[1]))).toFixed(1)}`).join("");
+      g += `<path d="${d}" fill="none" stroke="${s.color}" stroke-width="2" stroke-linejoin="round"><title>${s.name}</title></path>`;
+    });
+  });
+  g += `</g>`;
+  g += `<text x="${m.l + pw / 2}" y="${H - 6}" font-size="10.5" text-anchor="middle" fill="var(--ink-soft)">${o.xLabel}</text>`;
+  g += `<text transform="translate(11,${m.t + ph / 2}) rotate(-90)" font-size="10.5" text-anchor="middle" fill="var(--ink-soft)">${o.yLabel}</text>`;
+  return `<svg class="pref-curve" viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.title}" style="width:100%; height:auto; display:block;">${g}</svg>`;
+}
+
+/* people: [{name, gamma, lam, alpha, beta, delta}] -- colour follows list position. */
+function prefCurvesHTML(people) {
+  const P = people.map((p, i) => ({ ...p, color: p.color || NAME_COLORS[p.name] || CURVE_COLORS[i % CURVE_COLORS.length] }));
+  const Wg = linspace(0.3, 2.5, 160), xl = linspace(-1, -0.0005, 140), xg = linspace(0.0005, 1, 140);
+  const pp = linspace(0.0005, 1, 160), tt = linspace(1, 365, 120);
+  const util = svgChart({ title: "Utility function (EUT, CRRA)", formula: "u(W) = (W^(1−γ) − 1) / (1−γ)",
+    xMin: 0.3, xMax: 2.5, yMin: -2.2, yMax: 2.2, xTicks: [0.5, 1, 1.5, 2, 2.5], yTicks: [-2, -1, 0, 1, 2],
+    xLabel: "Wealth relative to today (W/W₀)", yLabel: "u(W)", refLines: [{ x: 1, dash: true }],
+    series: P.map((p) => ({ name: `${p.name}: γ=${p.gamma.toFixed(2)}`, color: p.color, segments: [Wg.map((w) => [w, crraU(w, p.gamma)])] })) });
+  const val = svgChart({ title: "Value function (prospect theory)", formula: "v(x) = x^e gains, −λ|x|^e losses, e = max(1−γ, 0.05)",
+    xMin: -1, xMax: 1, yMin: -1.7, yMax: 1.1, xTicks: [-1, -0.5, 0, 0.5, 1], yTicks: [-1.5, -1, -0.5, 0, 0.5, 1],
+    xLabel: "Gain / loss vs. reference point (stakes)", yLabel: "v(x)", refLines: [{ x: 0 }, { y: 0 }],
+    series: P.map((p) => ({ name: `${p.name}: γ=${p.gamma.toFixed(2)}, λ=${p.lam.toFixed(2)}`, color: p.color,
+      segments: [xl.map((x) => [x, ptValue(x, p.gamma, p.lam)]), xg.map((x) => [x, ptValue(x, p.gamma, p.lam)])] })) });
+  const wgt = svgChart({ title: "Probability weighting (Prelec 1998)", formula: "w(p) = exp(−(−ln p)^α)",
+    xMin: 0, xMax: 1, yMin: 0, yMax: 1, xTicks: [0, 0.25, 0.5, 0.75, 1], yTicks: [0, 0.25, 0.5, 0.75, 1],
+    xLabel: "Objective probability p", yLabel: "w(p)", refLines: [{ diag: true }],
+    series: P.map((p) => ({ name: `${p.name}: α=${p.alpha.toFixed(2)}`, color: p.color, segments: [pp.map((q) => [q, prelecW(q, p.alpha)])] })) });
+  const dsc = svgChart({ title: "Time preference (quasi-hyperbolic)", formula: "D(0) = 1,  D(t) = β·δ^(t/30) for t > 0",
+    xMin: 0, xMax: 365, yMin: 0, yMax: 1.05, xTicks: [0, 90, 180, 270, 365], yTicks: [0, 0.25, 0.5, 0.75, 1],
+    xLabel: "Delay t (days)", yLabel: "D(t)",
+    series: P.map((p) => ({ name: `${p.name}: β=${p.beta.toFixed(2)}, δ=${p.delta.toFixed(3)}`, color: p.color,
+      segments: [[[0, 1], [0.01, qhD(1, p.beta, p.delta)]], tt.map((t) => [t, qhD(t, p.beta, p.delta)])] })) });
+  const legend = `<div class="curve-legend" style="display:flex; flex-wrap:wrap; gap:6px 16px; font-size:12.5px; margin:6px 0 4px;">` +
+    P.map((p) => `<span style="display:inline-flex; align-items:center; gap:6px;"><span style="width:18px; height:3px; border-radius:2px; background:${p.color}; display:inline-block;"></span>${p.name} <span style="color:var(--ink-soft);">(γ ${p.gamma.toFixed(2)}, λ ${p.lam.toFixed(2)}, α ${p.alpha.toFixed(2)}, β ${p.beta.toFixed(2)}, δ ${p.delta.toFixed(3)})</span></span>`).join("") + `</div>`;
+  return `<div class="pref-curves">${legend}<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:14px; margin-top:8px;">${util}${val}${wgt}${dsc}</div></div>`;
+}
+
+function renderPortfolioHTML(portfolio, bfi2Domains, generalRisk, opts) {
+  opts = opts || {};
+  const { eut, bpt, gamma, lam } = portfolio;
+  const saturated = eut.riskyFraction >= 0.999 && eut.riskyFractionUnclipped > 1.05;
+  const notes = buildCommentary(gamma, lam, bfi2Domains, generalRisk);
+
+  const topN = (weights, n) => {
+    const idx = weights.map((w, i) => [w, i]).filter(([w]) => w > 1e-4).sort((a, b) => b[0] - a[0]).slice(0, n);
+    return idx.map(([w, i]) => `<tr><td>${UNIVERSE.tickers[i]}</td><td>${fmtPct2(w)}</td></tr>`).join("");
+  };
+
+  const nT = eut.riskyWeights.filter((w) => w > 1e-4).length;
+  const sl = bpt.safetyLayer, al = bpt.aspirationLayer;
+  const holdRows = `<tr><td>G-Secs (risk-free, ${fmtPct2(UNIVERSE.rf)})</td><td>${fmtPct2(bpt.gsecWeight)}</td></tr>` + topN(bpt.combinedWeights, 8);
+  return `
+    <div class="note" style="margin-top:22px;">
+      <strong>Expected Utility Theory (classic mean-variance)</strong><br/>
+      Equities: ${fmtPct(eut.riskyFraction)} in the diversified tangency portfolio (${nT} stocks, none above ${fmtPct(POSITION_CAP)}) &middot; <span style="white-space:nowrap">G-Secs: ${fmtPct(eut.cashFraction)}</span><br/>
+      Expected return ${fmtPct2(eut.expectedReturn)} &middot; volatility ${fmtPct2(eut.volatility)} &middot; chance of a losing year &asymp; ${fmtPct(eut.probLoss)}
+      ${saturated ? `<br/><span style="color:var(--loss);">Your risk aversion (&gamma;=${gamma.toFixed(2)}) implies you'd want more than 100% in equities (leverage) under classic EUT &mdash; since this mandate is long-only, the allocation is capped at 100% equities / 0% G-Secs. This is a real limitation of EUT for a peer group this risk-tolerant, not a rounding artifact.</span>` : ""}
+    </div>
+    <div class="note">
+      <strong>SP/A &middot; Behavioral Portfolio Theory (two mental accounts)</strong><br/>
+      <em>Safety account</em>: ${fmtPct(bpt.safetyCapitalFrac)} of your money (set by your loss aversion &lambda;=${lam.toFixed(2)}) &mdash;
+      <span style="white-space:nowrap">${fmtPct(sl.gsecShare)} G-Secs</span> and ${fmtPct(sl.equityShare)} in the tangency portfolio, sized so this account loses money in at most 1 year in 20
+      (expected ${fmtPct2(sl.expectedReturn)}, volatility ${fmtPct2(sl.volatility)}).<br/>
+      <em>Aspiration account</em>: ${fmtPct(1 - bpt.safetyCapitalFrac)} &mdash; ${al.nNames} stocks (none above ${fmtPct(POSITION_CAP)}) chosen for the best chance of beating ${fmtPct2(al.threshold)} a year
+      (expected ${fmtPct2(al.expectedReturn)}, volatility ${fmtPct2(al.volatility)}).<br/>
+      <em>Overall</em>: <span style="white-space:nowrap">${fmtPct(bpt.gsecWeight)} G-Secs</span>, ${fmtPct(bpt.equityWeight)} equities &middot; expected return ${fmtPct2(bpt.combinedExpectedReturn)} &middot; volatility ${fmtPct2(bpt.combinedVolatility)} &middot; chance of a losing year &asymp; ${fmtPct(bpt.probLoss)}
+    </div>
+    <label class="field-label">Top holdings &mdash; BPT combined portfolio (share of total wealth)</label>
+    <table class="results"><thead><tr><th>Holding</th><th>Weight</th></tr></thead><tbody>${holdRows}</tbody></table>
+    ${notes.length ? `<div class="note"><strong>Personality-linked commentary</strong><br/>${notes.join("<br/><br/>")}</div>` : ""}
+    <div class="note" style="font-size:12.5px;">
+      Universe: ${UNIVERSE.tickers.length} NSE stocks from our Markowitz Portfolio Project, r<sub>f</sub>=${fmtPct(UNIVERSE.rf)} (G-Secs).
+      Every equity sleeve is capped at ${fmtPct(POSITION_CAP)} per stock.
+      Expected returns are not raw market data &mdash; back-solved via Black-Litterman-style reverse optimization
+      (market-cap-weighted reference, &lambda;<sub>mkt</sub>=2.5, He &amp; Litterman 1999) since the workbook exposes
+      only the covariance matrix and an already-optimized weight vector, not per-stock expected returns directly.
+      Chances of a losing year assume normally distributed returns. This is a modeling estimate, not a guarantee.
+    </div>
+  `;
+}
+
+function fmtRupeeSigned(x) {
+  const abs = Math.round(Math.abs(x)).toLocaleString("en-IN");
+  return x >= 0
+    ? `<span class="amt-gain">Gain ₹${abs}</span>`
+    : `<span class="amt-loss">Lose ₹${abs}</span>`;
+}
+function fmtRupeePlain(x) { return `₹${Math.round(x).toLocaleString("en-IN")}`; }
+function fmtDelay(days) {
+  if (days <= 0) return "today";
+  const m = Math.round(days / 30);
+  return `in ${m} month${m === 1 ? "" : "s"}`;
+}
+
+function el(html) { const d = document.createElement("div"); d.innerHTML = html.trim(); return d.firstElementChild; }
+function mount(node) { const app = document.getElementById("app"); app.innerHTML = ""; app.appendChild(node); }
+
+function render() {
+  if (state.screen === "intro") return renderIntro();
+  if (state.screen === "anchor1") return renderAnchor(1);
+  if (state.screen === "anchor2") return renderAnchor(2);
+  if (state.screen === "grablelytton") return renderGrableLytton();
+  if (state.screen === "dospert") return renderDospert();
+  if (state.screen === "bfi2") return renderBfi2();
+  if (state.screen === "question") return renderQuestion();
+  if (state.screen === "done") return renderDone();
+  if (state.screen === "researcher") return renderResearcher();
+  if (state.screen === "evaluate") return renderEvaluate();
+}
+
+function renderIntro() {
+  const node = el(`
+    <div>
+      <div class="brand">MBA680 &middot; Behavioral Finance</div>
+      <h1>Risk &amp; time preferences</h1>
+      <p class="lede">About 100 quick items covering money choices, three validated psychological scales
+      (financial risk tolerance, risk propensity, and personality), and a short adaptive section &mdash; no
+      right answers, answer with your gut reaction. Takes about 20&ndash;25 minutes and helps build your
+      personal portfolio recommendation later in the project.</p>
+      <label class="field-label" for="nameInput">Your name</label>
+      <input type="text" id="nameInput" placeholder="e.g. Ayushi Mishra" autocomplete="off" />
+      <div class="btn-row">
+        <button class="btn" id="startBtn" disabled>Start</button>
+      </div>
+      <div class="foot-links">
+        This covers risk &amp; time preferences, the Grable-Lytton and DOSPERT risk-tolerance scales, and the
+        full BFI-2 personality inventory &mdash; everything for Steps 2, 3, and 4 in one sitting.
+        <br /><br />
+        <a href="#" id="researcherLink">Combine responses (researcher view)</a>
+        <br /><br />
+        <a href="#" id="evaluateLink"><strong>View the full project &amp; results &mdash; instruments, methodology, and all 5 respondents' portfolio recommendations (for evaluation)</strong></a>
+      </div>
+    </div>
+  `);
+  const nameInput = node.querySelector("#nameInput");
+  const startBtn = node.querySelector("#startBtn");
+  nameInput.addEventListener("input", () => { startBtn.disabled = nameInput.value.trim().length === 0; });
+  nameInput.addEventListener("keydown", (e) => { if (e.key === "Enter" && !startBtn.disabled) startBtn.click(); });
+  startBtn.addEventListener("click", () => {
+    state.name = nameInput.value.trim();
+    state.screen = "anchor1";
+    render();
+  });
+  node.querySelector("#researcherLink").addEventListener("click", (e) => {
+    e.preventDefault(); state.screen = "researcher"; render();
+  });
+  node.querySelector("#evaluateLink").addEventListener("click", (e) => {
+    e.preventDefault(); state.screen = "evaluate"; location.hash = "evaluate"; render();
+  });
+  mount(node);
+  nameInput.focus();
+}
+
+function renderAnchor(which) {
+  const isFirst = which === 1;
+  const qtext = isFirst
+    ? "How willing are you, in general, to take risks?"
+    : "How willing are you, in general, to give up something today for a bigger reward later?";
+  const ends = isFirst ? ["Not at all willing", "Very willing"] : ["Not at all willing", "Very willing"];
+  const node = el(`
+    <div>
+      <div class="progress-label">Warm-up ${which} of 2</div>
+      <div class="progress-track"><div class="progress-fill" style="width:${isFirst ? 5 : 10}%"></div></div>
+      <h2 class="qtext">${qtext}</h2>
+      <div class="scale-row" id="scaleRow"></div>
+      <div class="scale-ends"><span>${ends[0]}</span><span>${ends[1]}</span></div>
+    </div>
+  `);
+  const row = node.querySelector("#scaleRow");
+  for (let i = 0; i <= 10; i++) {
+    const b = el(`<button class="scale-btn" data-v="${i}">${i}</button>`);
+    b.addEventListener("click", () => {
+      if (isFirst) state.generalRisk = i; else state.generalPatience = i;
+      if (isFirst) { state.screen = "anchor2"; render(); }
+      else { state.screen = "grablelytton"; state.glIndex = 0; render(); }
+    });
+    row.appendChild(b);
+  }
+  mount(node);
+}
+
+function renderGrableLytton() {
+  const item = GRABLE_LYTTON_ITEMS[state.glIndex];
+  const total = GRABLE_LYTTON_ITEMS.length;
+  const pct = Math.round((state.glIndex / total) * 100);
+  const node = el(`
+    <div>
+      <div class="progress-label">Financial risk-tolerance scale &middot; ${state.glIndex + 1} of ${total}</div>
+      <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <h2 class="qtext">${item.q}</h2>
+      <div class="options" id="glOpts"></div>
+      <div class="foot-links">Grable &amp; Lytton (1999) Financial Risk Tolerance Scale</div>
+    </div>
+  `);
+  const host = node.querySelector("#glOpts");
+  item.opts.forEach(([text, score]) => {
+    const b = el(`<button class="option-card"><div class="option-main">${text}</div></button>`);
+    b.addEventListener("click", () => {
+      state.glAnswers.push({ item: state.glIndex + 1, text, score });
+      state.glIndex += 1;
+      if (state.glIndex >= total) { state.screen = "dospert"; state.dospertIndex = 0; render(); }
+      else render();
+    });
+    host.appendChild(b);
+  });
+  mount(node);
+}
+
+function renderDospert() {
+  const item = DOSPERT_FIN_ITEMS[state.dospertIndex];
+  const total = DOSPERT_FIN_ITEMS.length;
+  const pct = Math.round((state.dospertIndex / total) * 100);
+  const labels = ["Extremely unlikely", "Moderately unlikely", "Somewhat unlikely", "Not sure", "Somewhat likely", "Moderately likely", "Extremely likely"];
+  const node = el(`
+    <div>
+      <div class="progress-label">Financial risk propensity &middot; ${state.dospertIndex + 1} of ${total}</div>
+      <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <h2 class="qtext">How likely are you to do this?</h2>
+      <p class="lede">${item.text}</p>
+      <div class="scale-row" id="dRow"></div>
+      <div class="scale-ends"><span>Extremely unlikely</span><span>Extremely likely</span></div>
+      <div class="foot-links">Blais &amp; Weber (2006) DOSPERT Scale &mdash; financial subscale</div>
+    </div>
+  `);
+  const row = node.querySelector("#dRow");
+  for (let i = 1; i <= 7; i++) {
+    const b = el(`<button class="scale-btn" title="${labels[i - 1]}">${i}</button>`);
+    b.addEventListener("click", () => {
+      state.dospertAnswers.push({ text: item.text, domain: item.domain, rating: i });
+      state.dospertIndex += 1;
+      if (state.dospertIndex >= total) { state.screen = "bfi2"; state.bfi2DomainIndex = 0; render(); }
+      else render();
+    });
+    row.appendChild(b);
+  }
+  mount(node);
+}
+
+function renderBfi2() {
+  const DOMAIN_ORDER = ["Extraversion", "Agreeableness", "Conscientiousness", "Negative Emotionality", "Open-Mindedness"];
+  const domain = DOMAIN_ORDER[state.bfi2DomainIndex];
+  const items = BFI2_ITEMS.map((it, idx) => ({ ...it, idx })).filter((it) => it.domain === domain);
+  const pct = Math.round((state.bfi2DomainIndex / DOMAIN_ORDER.length) * 100);
+  const labels = ["Disagree strongly", "Disagree a little", "Neutral; no opinion", "Agree a little", "Agree strongly"];
+
+  const node = el(`
+    <div>
+      <div class="progress-label">Personality &middot; ${state.bfi2DomainIndex + 1} of ${DOMAIN_ORDER.length}</div>
+      <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <h2 class="qtext">I am someone who&hellip;</h2>
+      <p class="lede">Rate each statement below from 1 (Disagree strongly) to 5 (Agree strongly).</p>
+      <div id="bfi2List"></div>
+      <div class="btn-row">
+        <button class="btn" id="bfi2Next" disabled>Continue</button>
+      </div>
+      <div class="foot-links">BFI-2 &copy; 2015 Oliver P. John &amp; Christopher J. Soto &mdash; Soto &amp; John (2017)</div>
+    </div>
+  `);
+  const list = node.querySelector("#bfi2List");
+  const nextBtn = node.querySelector("#bfi2Next");
+
+  items.forEach((item) => {
+    const row = el(`
+      <div style="margin-bottom:20px;">
+        <div style="font-size:16px; margin-bottom:8px;">${item.text}</div>
+        <div class="scale-row" data-idx="${item.idx}"></div>
+      </div>
+    `);
+    const scaleRow = row.querySelector(".scale-row");
+    for (let i = 1; i <= 5; i++) {
+      const b = el(`<button class="scale-btn" title="${labels[i - 1]}">${i}</button>`);
+      b.addEventListener("click", () => {
+        state.bfi2Answers[item.idx] = i;
+        scaleRow.querySelectorAll(".scale-btn").forEach((btn) => btn.classList.remove("selected"));
+        b.classList.add("selected");
+        checkComplete();
+      });
+      scaleRow.appendChild(b);
+    }
+    list.appendChild(row);
+  });
+
+  function checkComplete() {
+    const allAnswered = items.every((it) => state.bfi2Answers[it.idx] != null);
+    nextBtn.disabled = !allAnswered;
+  }
+  nextBtn.addEventListener("click", () => {
+    state.bfi2DomainIndex += 1;
+    if (state.bfi2DomainIndex >= DOMAIN_ORDER.length) beginAdaptivePhase();
+    else render();
+  });
+  mount(node);
+}
+
+function summarizeBfi2() {
+  const domainScores = {}, domainCounts = {};
+  const facetScores = {}, facetCounts = {};
+  BFI2_ITEMS.forEach((item, idx) => {
+    const raw = state.bfi2Answers[idx];
+    if (raw == null) return;
+    const val = item.reverse ? 6 - raw : raw;
+    domainScores[item.domain] = (domainScores[item.domain] || 0) + val;
+    domainCounts[item.domain] = (domainCounts[item.domain] || 0) + 1;
+    facetScores[item.facet] = (facetScores[item.facet] || 0) + val;
+    facetCounts[item.facet] = (facetCounts[item.facet] || 0) + 1;
+  });
+  const domains = {};
+  for (const d in domainScores) domains[d] = Math.round((domainScores[d] / domainCounts[d]) * 100) / 100;
+  const facets = {};
+  for (const f in facetScores) facets[f] = Math.round((facetScores[f] / facetCounts[f]) * 100) / 100;
+  return { domains, facets };
+}
+
+function beginAdaptivePhase() {
+  state.session = newSession();
+  state.available = Array.from({ length: CANDIDATE_POOL.length }, (_, i) => i);
+  state.qIndex = 0;
+  state.inRetest = false;
+  state.screen = "question";
+  render();
+}
+
+function renderQuestion() {
+  const total = N_QUESTIONS + N_RETESTS;
+  let doneCount, idx;
+  if (!state.inRetest) {
+    doneCount = state.qIndex;
+    idx = selectNextQuestion(state.session, state.available);
+  } else {
+    doneCount = N_QUESTIONS + (N_RETESTS - state.retestQueue.length);
+    idx = state.retestQueue[0];
+  }
+  const pct = Math.round((10 + (doneCount / total) * 90));
+  const prompt = CANDIDATE_POOL[idx];
+  state.currentIdx = idx;
+
+  let optA, optB;
+  if (prompt.kind === "risk") {
+    optA = `<div class="option-label">Option A</div><div class="option-main">${fmtRupeeSigned(prompt.sure)}, for sure</div>`;
+    optB = `<div class="option-label">Option B</div><div class="option-main">${Math.round(prompt.p * 100)}% chance of ${fmtRupeeSigned(prompt.high)}<br/>otherwise ${fmtRupeeSigned(prompt.low)}</div>`;
+  } else {
+    optA = `<div class="option-label">Option A</div><div class="option-main">${fmtRupeePlain(prompt.amountNow)} ${fmtDelay(prompt.tNow)}</div>`;
+    optB = `<div class="option-label">Option B</div><div class="option-main">${fmtRupeePlain(prompt.amountLater)} ${fmtDelay(prompt.tLater)}</div>`;
+  }
+
+  const node = el(`
+    <div>
+      <div class="progress-label">Question ${doneCount + 1} of ${total}</div>
+      <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <h2 class="qtext">Which would you rather have?</h2>
+      <div class="options">
+        <button class="option-card" id="optA">${optA}</button>
+        <button class="option-card" id="optB">${optB}</button>
+      </div>
+    </div>
+  `);
+  node.querySelector("#optA").addEventListener("click", () => answer(false));
+  node.querySelector("#optB").addEventListener("click", () => answer(true));
+  mount(node);
+}
+
+function answer(choseB) {
+  const idx = state.currentIdx;
+  if (!state.inRetest) {
+    updateSession(state.session, idx, choseB);
+    state.available = state.available.filter((i) => i !== idx);
+    state.qIndex += 1;
+    if (state.qIndex >= N_QUESTIONS) {
+      // pick retest questions from what's been asked
+      const askedIdx = state.session.asked.map((a) => a.idx);
+      const shuffled = [...askedIdx].sort(() => Math.random() - 0.5);
+      state.retestQueue = shuffled.slice(0, N_RETESTS);
+      state.retestOf = state.retestQueue.map((qi) => state.session.asked.findIndex((a) => a.idx === qi));
+      state.inRetest = true;
+    }
+  } else {
+    updateSession(state.session, idx, choseB);
+    state.retestQueue.shift();
+    if (state.retestQueue.length === 0) { finish(); return; }
+  }
+  render();
+}
+
+function grableLyttonLevel(score) {
+  if (score >= 33) return "High";
+  if (score >= 29) return "Above-average";
+  if (score >= 23) return "Average/moderate";
+  if (score >= 19) return "Below-average";
+  return "Low";
+}
+function summarizeGrableLytton() {
+  const total = state.glAnswers.reduce((s, a) => s + a.score, 0);
+  return { total, level: grableLyttonLevel(total), items: state.glAnswers };
+}
+function summarizeDospert() {
+  const investing = state.dospertAnswers.filter((a) => a.domain === "investing");
+  const gambling = state.dospertAnswers.filter((a) => a.domain === "gambling");
+  const mean = (arr) => arr.length ? arr.reduce((s, a) => s + a.rating, 0) / arr.length : null;
+  return { investingMean: mean(investing), gamblingMean: mean(gambling), items: state.dospertAnswers };
+}
+
+function finish() {
+  const summary = posteriorSummary(state.session);
+  // retest consistency: compare each retest answer to its original
+  const asked = state.session.asked;
+  const nMain = N_QUESTIONS;
+  let matches = 0;
+  state.retestOf.forEach((origPos, k) => {
+    const retestPos = nMain + k;
+    if (asked[origPos] && asked[retestPos] && asked[origPos].idx === asked[retestPos].idx) {
+      matches += asked[origPos].choseB === asked[retestPos].choseB ? 1 : 0;
+    }
+  });
+  state.result = {
+    schemaVersion: 3,
+    name: state.name,
+    submittedAt: new Date().toISOString(),
+    generalRisk: state.generalRisk,
+    generalPatience: state.generalPatience,
+    grableLytton: summarizeGrableLytton(),
+    dospertFinancial: summarizeDospert(),
+    bfi2: summarizeBfi2(),
+    answers: asked.map((a) => ({ ...CANDIDATE_POOL[a.idx], choseB: a.choseB })),
+    posterior: summary,
+    retestConsistency: N_RETESTS > 0 ? matches / N_RETESTS : null,
+  };
+  // Compute this respondent's own (unpooled) portfolio recommendation
+  // immediately -- pooling with peers in the researcher view refines gamma
+  // and lambda further, but there's no reason to make someone wait for
+  // that just to see a first-pass recommendation.
+  try {
+    state.portfolioResult = constructPortfolios(UNIVERSE, summary.gamma.mean, summary.lam.mean);
+  } catch (e) {
+    state.portfolioResult = null;
+  }
+  state.screen = "done";
+  render();
+}
+
+function browserDownload(filename, text) {
+  // Plain-browser fallback (e.g. when self-hosted on Vercel / any static host).
+  try {
+    const type = filename.endsWith(".csv") ? "text/csv" : "application/json";
+    const url = URL.createObjectURL(new Blob([text], { type: type + ";charset=utf-8" }));
+    const a = document.createElement("a");
+    a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+async function tryDownload(filename, text) {
+  try {
+    if (typeof window.claude !== "undefined" && window.claude && window.claude.use) {
+      const downloads = await window.claude.use("downloads");
+      if (downloads) {
+        const res = await downloads.save({ filename, data: text });
+        if (res.status === "saved" || res.status === "delivered") return true;
+      }
+    }
+  } catch (e) { /* fall through to the plain browser download */ }
+  return browserDownload(filename, text);
+}
+
+function renderDone() {
+  const json = JSON.stringify(state.result, null, 2);
+  const safeName = (state.name || "respondent").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const node = el(`
+    <div>
+      <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+      <h2 class="qtext">That's everything &mdash; thank you, ${state.name || "friend"}.</h2>
+      <p class="lede">Download your results file and send it to Adwaaiit (WhatsApp, email, whatever's easiest).
+      If the download doesn't work on your device, copy the text box below instead.</p>
+      <div class="btn-row">
+        <button class="btn" id="dlBtn">Download my results (.json)</button>
+      </div>
+      ${state.portfolioResult ? `<h2 class="qtext" style="margin-top:32px; font-size:20px;">Your recommended portfolio</h2>${renderPortfolioHTML(state.portfolioResult, state.result.bfi2.domains, state.result.generalRisk)}` : ""}
+      <h2 class="qtext" style="margin-top:32px; font-size:20px;">Your utility &amp; value functions</h2>
+      <p class="lede" style="font-size:13.5px;">Drawn from the five preference parameters your 20 choices revealed (posterior means).</p>
+      ${prefCurvesHTML([{ name: state.name || "You", gamma: state.result.posterior.gamma.mean, lam: state.result.posterior.lam.mean,
+        alpha: state.result.posterior.alpha_w.mean, beta: state.result.posterior.beta_hyp.mean, delta: state.result.posterior.delta.mean }])}
+      <label class="field-label" for="dump" style="margin-top:28px;">Or copy the raw results</label>
+      <textarea class="dump" id="dump" readonly></textarea>
+    </div>
+  `);
+  const dump = node.querySelector("#dump");
+  dump.value = json;
+  node.querySelector("#dlBtn").addEventListener("click", async (e) => {
+    const btn = e.currentTarget;
+    btn.disabled = true; btn.textContent = "Saving…";
+    const ok = await tryDownload(`${safeName}-risk-time-results.json`, json);
+    btn.disabled = false;
+    btn.textContent = ok ? "Downloaded ✓" : "Download my results (.json)";
+    if (!ok) dump.focus();
+  });
+  mount(node);
+}
+
+/* -------------------- researcher / combine view -------------------- */
+/* ---- Empirical-Bayes hierarchical pooling across the loaded group ----
+   Mirrors robo_advisory/ingest.py's pool_group_from_summaries(): classic
+   Efron-Morris shrinkage of each respondent's (mean, ci90) posterior toward
+   the group mean, with the same disclosed floor (default 0.30) so a small
+   group doesn't over-pool everyone to the same number. */
+function ciToVariance(ci90) {
+  if (!ci90 || ci90[0] == null || ci90[1] == null) return 1e-6;
+  const sd = Math.max((ci90[1] - ci90[0]) / (2 * 1.645), 1e-6);
+  return sd * sd;
+}
+function poolGroup(rows, minIndividualWeight = 0.30) {
+  const params = ["gamma", "lam", "alpha_w", "beta_hyp", "delta"];
+  const result = rows.map(() => ({}));
+  for (const p of params) {
+    const means = rows.map((r) => (r.posterior && r.posterior[p] && r.posterior[p].mean) ?? 0);
+    const withinVars = rows.map((r) => ciToVariance(r.posterior && r.posterior[p] && r.posterior[p].ci90));
+    const popMean = means.reduce((a, b) => a + b, 0) / means.length;
+    let betweenVar = 0;
+    if (means.length > 1) betweenVar = means.reduce((a, b) => a + (b - popMean) ** 2, 0) / (means.length - 1);
+    rows.forEach((r, i) => {
+      const w = betweenVar <= 1e-9 ? minIndividualWeight : Math.max(betweenVar / (betweenVar + withinVars[i]), minIndividualWeight);
+      const pooled = w * means[i] + (1 - w) * popMean;
+      result[i][p] = { raw: means[i], pooled, withinVar: withinVars[i], shrinkageWeight: w, groupMean: popMean };
+    });
+  }
+  return result;
+}
+
+function renderResearcher() {
+  const node = el(`
+    <div>
+      <div class="brand">MBA680 &middot; Behavioral Finance</div>
+      <h1>Combine responses</h1>
+      <p class="lede">Select the .json result files everyone sent you. Nothing leaves this browser tab &mdash;
+      the files are only read locally to build the table and portfolio dashboard below.</p>
+      <input type="file" id="fileInput" accept=".json" multiple />
+      <div id="tableHost"></div>
+      <div class="btn-row hidden" id="csvRow">
+        <button class="btn" id="csvBtn">Download combined CSV</button>
+      </div>
+      <div id="dashboardHost"></div>
+      <div class="foot-links"><a href="#" id="backLink">&larr; Back</a></div>
+    </div>
+  `);
+  node.querySelector("#backLink").addEventListener("click", (e) => { e.preventDefault(); state.screen = "intro"; render(); });
+
+  let rows = [];
+  let pooled = [];
+  function renderTable() {
+    const host = node.querySelector("#tableHost");
+    if (rows.length === 0) { host.innerHTML = ""; node.querySelector("#csvRow").classList.add("hidden"); return; }
+    let html = `<table class="results"><thead><tr>
+      <th>Name</th><th>&gamma;</th><th>&lambda;</th><th>&beta;</th><th>&delta;</th>
+      <th>G-L score</th><th>DOSPERT inv.</th><th>DOSPERT gamb.</th>
+      <th>BFI2 Extra.</th><th>BFI2 Agree.</th><th>BFI2 Consc.</th><th>BFI2 NegEm.</th><th>BFI2 Open.</th>
+      <th>Gen. risk</th><th>Gen. patience</th><th>Retest</th></tr></thead><tbody>`;
+    for (const r of rows) {
+      const p = r.posterior || {};
+      const g = (p.gamma && p.gamma.mean) ?? "";
+      const l = (p.lam && p.lam.mean) ?? "";
+      const b = (p.beta_hyp && p.beta_hyp.mean) ?? "";
+      const d = (p.delta && p.delta.mean) ?? "";
+      const gl = r.grableLytton ? `${r.grableLytton.total} (${r.grableLytton.level})` : "";
+      const dInv = r.dospertFinancial && r.dospertFinancial.investingMean != null ? r.dospertFinancial.investingMean.toFixed(2) : "";
+      const dGam = r.dospertFinancial && r.dospertFinancial.gamblingMean != null ? r.dospertFinancial.gamblingMean.toFixed(2) : "";
+      const bd = (r.bfi2 && r.bfi2.domains) || {};
+      html += `<tr><td>${r.name || ""}</td><td>${g}</td><td>${l}</td><td>${b}</td><td>${d}</td>
+        <td>${gl}</td><td>${dInv}</td><td>${dGam}</td>
+        <td>${bd["Extraversion"] ?? ""}</td><td>${bd["Agreeableness"] ?? ""}</td>
+        <td>${bd["Conscientiousness"] ?? ""}</td><td>${bd["Negative Emotionality"] ?? ""}</td>
+        <td>${bd["Open-Mindedness"] ?? ""}</td>
+        <td>${r.generalRisk ?? ""}</td><td>${r.generalPatience ?? ""}</td>
+        <td>${r.retestConsistency ?? ""}</td></tr>`;
+    }
+    html += `</tbody></table>`;
+    host.innerHTML = html;
+    node.querySelector("#csvRow").classList.remove("hidden");
+  }
+
+  function renderDashboard() {
+    const host = node.querySelector("#dashboardHost");
+    if (rows.length === 0) { host.innerHTML = ""; return; }
+    pooled = poolGroup(rows);
+    let html = `<hr class="hairline" /><h2 class="qtext" style="font-size:22px;">Group portfolio dashboard</h2>
+      <p class="lede">Each person's pooled &gamma; and &lambda; (shrunk toward the group mean, floor=0.30 &mdash;
+      see the Python pipeline's hierarchical.py for the same logic), run through Step 5 against the real asset universe.</p>
+      <table class="results"><thead><tr><th>Name</th><th>&gamma; pooled</th><th>&lambda; pooled</th>
+      <th>EUT risky %</th><th>BPT safety %</th><th>BPT G-Secs</th><th>BPT return</th><th>BPT vol</th></tr></thead><tbody>`;
+    const portfolios = rows.map((r, i) => {
+      const g = pooled[i].gamma.pooled, l = pooled[i].lam.pooled;
+      const port = constructPortfolios(UNIVERSE, g, l);
+      html += `<tr><td>${r.name || ""}</td><td>${g.toFixed(3)}</td><td>${l.toFixed(3)}</td>
+        <td>${fmtPct(port.eut.riskyFraction)}</td><td>${fmtPct(port.bpt.safetyCapitalFrac)}</td><td>${fmtPct(port.bpt.gsecWeight)}</td>
+        <td>${fmtPct2(port.bpt.combinedExpectedReturn)}</td><td>${fmtPct2(port.bpt.combinedVolatility)}</td></tr>`;
+      return port;
+    });
+    html += `</tbody></table>`;
+    host.innerHTML = html;
+
+    // Per-person detail: reuse the same portfolio-section renderer as the
+    // individual "done" screen, so the group view and self-serve view never drift apart.
+    rows.forEach((r, i) => {
+      const detail = el(`<details style="margin-top:14px;"><summary style="cursor:pointer; font-size:15px;">${r.name || "Respondent " + (i + 1)} &mdash; full breakdown</summary></details>`);
+      const g = pooled[i].gamma.pooled, l = pooled[i].lam.pooled;
+      const bfi2Domains = (r.bfi2 && r.bfi2.domains) || null;
+      detail.insertAdjacentHTML("beforeend", renderPortfolioHTML(portfolios[i], bfi2Domains, r.generalRisk));
+      host.appendChild(detail);
+    });
+  }
+
+  node.querySelector("#fileInput").addEventListener("change", async (e) => {
+    const files = Array.from(e.target.files || []);
+    rows = [];
+    for (const f of files) {
+      try {
+        const text = await f.text();
+        const data = JSON.parse(text);
+        rows.push(data);
+      } catch (err) { /* skip unreadable file */ }
+    }
+    renderTable();
+    renderDashboard();
+  });
+
+  node.querySelector("#csvBtn").addEventListener("click", async () => {
+    const headers = ["name", "gamma_raw", "gamma_pooled", "lambda_raw", "lambda_pooled", "alpha_w", "beta_hyp", "delta",
+      "grableLyttonTotal", "grableLyttonLevel", "dospertInvesting", "dospertGambling",
+      "bfi2Extraversion", "bfi2Agreeableness", "bfi2Conscientiousness", "bfi2NegativeEmotionality", "bfi2OpenMindedness",
+      "generalRisk", "generalPatience", "retestConsistency",
+      "EUT_risky_fraction", "EUT_expected_return", "EUT_volatility",
+      "BPT_safety_capital_frac", "BPT_combined_return", "BPT_combined_volatility", "BPT_gsec_weight"];
+    const lines = [headers.join(",")];
+    const poolNow = rows.length ? poolGroup(rows) : [];
+    rows.forEach((r, i) => {
+      const p = r.posterior || {};
+      const gl = r.grableLytton || {};
+      const dp = r.dospertFinancial || {};
+      const bd = (r.bfi2 && r.bfi2.domains) || {};
+      const gPooled = poolNow[i].gamma.pooled, lPooled = poolNow[i].lam.pooled;
+      const port = constructPortfolios(UNIVERSE, gPooled, lPooled);
+      const vals = [
+        r.name || "", (p.gamma && p.gamma.mean) ?? "", gPooled.toFixed(4),
+        (p.lam && p.lam.mean) ?? "", lPooled.toFixed(4),
+        (p.alpha_w && p.alpha_w.mean) ?? "", (p.beta_hyp && p.beta_hyp.mean) ?? "", (p.delta && p.delta.mean) ?? "",
+        gl.total ?? "", gl.level ?? "", dp.investingMean ?? "", dp.gamblingMean ?? "",
+        bd["Extraversion"] ?? "", bd["Agreeableness"] ?? "", bd["Conscientiousness"] ?? "",
+        bd["Negative Emotionality"] ?? "", bd["Open-Mindedness"] ?? "",
+        r.generalRisk ?? "", r.generalPatience ?? "", r.retestConsistency ?? "",
+        port.eut.riskyFraction.toFixed(4), port.eut.expectedReturn.toFixed(4), port.eut.volatility.toFixed(4),
+        port.bpt.safetyCapitalFrac.toFixed(4), port.bpt.combinedExpectedReturn.toFixed(4), port.bpt.combinedVolatility.toFixed(4), port.bpt.gsecWeight.toFixed(4),
+      ];
+      lines.push(vals.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(","));
+    });
+    await tryDownload("combined-results.csv", lines.join("\n"));
+  });
+
+  mount(node);
+}
+
+/**
+ * Comprehensive, self-contained "evaluation" view: everything about this
+ * project -- the four survey instruments, the adaptive engine's full math,
+ * the EUT/BPT portfolio-construction methodology, and the pre-loaded group
+ * dashboard for all real respondents (EMBEDDED_RESPONDENTS) -- in one page,
+ * with no survey to fill in and no files to upload. Meant to be shared
+ * directly (e.g. with the professor) via the #evaluate link.
+ */
+function renderEvaluate() {
+  const rows = EMBEDDED_RESPONDENTS;
+  const pooled = poolGroup(rows);
+  const portfolios = rows.map((r, i) => constructPortfolios(UNIVERSE, pooled[i].gamma.pooled, pooled[i].lam.pooled));
+
+  const glHtml = `<ol style="padding-left:20px; font-size:13.5px;">` + GRABLE_LYTTON_ITEMS.map((it) =>
+    `<li style="margin-bottom:10px;">${it.q}<br/><span style="color:var(--ink-soft); font-size:12.5px;">${it.opts.map((o) => o[0]).join(" &middot; ")}</span></li>`
+  ).join("") + `</ol>`;
+
+  const dospertHtml = `<ol style="padding-left:20px; font-size:13.5px;">` + DOSPERT_FIN_ITEMS.map((it) =>
+    `<li>${it.text} <span style="color:var(--ink-soft);">(${it.domain})</span></li>`
+  ).join("") + `</ol>`;
+
+  const bfi2DomainOrder = ["Extraversion", "Agreeableness", "Conscientiousness", "Negative Emotionality", "Open-Mindedness"];
+  const bfi2Html = bfi2DomainOrder.map((d) => {
+    const items = BFI2_ITEMS.filter((it) => it.domain === d);
+    const li = items.map((it) => `<li>${it.text} <span style="color:var(--ink-soft); font-size:12px;">(${it.facet}${it.reverse ? ", reverse-keyed" : ""})</span></li>`).join("");
+    return `<details style="margin:6px 0;"><summary style="cursor:pointer; font-size:13.5px;">${d} &mdash; 12 items</summary><ol style="padding-left:20px; font-size:13px;">${li}</ol></details>`;
+  }).join("");
+
+  let tableHtml = `<table class="results"><thead><tr>
+    <th>Name</th><th>&gamma; pooled</th><th>&lambda; pooled</th><th>G-L score</th>
+    <th>DOSPERT inv.</th><th>DOSPERT gamb.</th><th>Retest</th></tr></thead><tbody>`;
+  rows.forEach((r, i) => {
+    tableHtml += `<tr><td>${r.name}</td><td>${pooled[i].gamma.pooled.toFixed(3)}</td><td>${pooled[i].lam.pooled.toFixed(3)}</td>
+      <td>${r.grableLytton.total} (${r.grableLytton.level})</td>
+      <td>${r.dospertFinancial.investingMean.toFixed(2)}</td><td>${r.dospertFinancial.gamblingMean.toFixed(2)}</td>
+      <td>${r.retestConsistency}</td></tr>`;
+  });
+  tableHtml += `</tbody></table>`;
+
+  let dashHtml = `<table class="results"><thead><tr><th>Name</th><th>EUT risky %</th><th>EUT return</th><th>EUT vol</th>
+    <th>BPT safety %</th><th>BPT G-Secs</th><th>BPT return</th><th>BPT vol</th></tr></thead><tbody>`;
+  rows.forEach((r, i) => {
+    const port = portfolios[i];
+    dashHtml += `<tr><td>${r.name}</td><td>${fmtPct(port.eut.riskyFraction)}</td><td>${fmtPct2(port.eut.expectedReturn)}</td><td>${fmtPct2(port.eut.volatility)}</td>
+      <td>${fmtPct(port.bpt.safetyCapitalFrac)}</td><td>${fmtPct(port.bpt.gsecWeight)}</td><td>${fmtPct2(port.bpt.combinedExpectedReturn)}</td><td>${fmtPct2(port.bpt.combinedVolatility)}</td></tr>`;
+  });
+  dashHtml += `</tbody></table>`;
+
+  const curvesHtml = prefCurvesHTML(rows.map((r, i) => ({ name: r.name, gamma: pooled[i].gamma.pooled, lam: pooled[i].lam.pooled,
+    alpha: pooled[i].alpha_w.pooled, beta: pooled[i].beta_hyp.pooled, delta: pooled[i].delta.pooled })));
+
+  const detailsHtml = rows.map((r, i) => {
+    const bfi2D = (r.bfi2 && r.bfi2.domains) || null;
+    return `<details style="margin-top:10px;"><summary style="cursor:pointer; font-size:14.5px;">${r.name} &mdash; full breakdown</summary>${renderPortfolioHTML(portfolios[i], bfi2D, r.generalRisk)}</details>`;
+  }).join("");
+
+  const node = el(`
+    <div>
+      <div class="brand">MBA680 &middot; Behavioral Finance</div>
+      <h1>Full project walkthrough</h1>
+      <p class="lede">Everything in one place, pre-loaded &mdash; no survey to fill in and no files to upload.
+      Prepared by Adwaaiit Pande &amp; Ayushi Mishra: the survey instruments, the adaptive elicitation engine's
+      mathematics, and the Expected Utility Theory (EUT) and SP/A Behavioral Portfolio Theory (BPT) portfolio
+      recommendations for all ${rows.length} peers who completed the survey (Shree Charan, Kshitij,
+      Kartika, Ayushi, and Adwaaiit Pande). See the accompanying
+      written report for full citations, disclosures, and the Step 6 personality-and-robo-advisory commentary.</p>
+
+      <h2 class="qtext" style="font-size:20px;">1) Survey instruments (Steps 2&ndash;4)</h2>
+      <p class="lede" style="font-size:14px;">Four instruments, chained in one sitting: two self-report anchors,
+      two validated third-party psychometric scales, and a purpose-built adaptive elicitation engine. Expand any
+      instrument below to see its full item list.</p>
+      <details style="margin:10px 0;"><summary style="cursor:pointer;">Grable &amp; Lytton (1999) &mdash; 13-item financial risk tolerance scale</summary>${glHtml}</details>
+      <details style="margin:10px 0;"><summary style="cursor:pointer;">DOSPERT financial subscale (Blais &amp; Weber, 2006) &mdash; 6 items</summary>${dospertHtml}</details>
+      <details style="margin:10px 0;"><summary style="cursor:pointer;">BFI-2 personality inventory (Soto &amp; John, 2017) &mdash; 60 items, 5 domains</summary>${bfi2Html}</details>
+      <details style="margin:10px 0;"><summary style="cursor:pointer;">Adaptive utility/value-function elicitation engine &mdash; mathematical formulation (Step 4)</summary>
+        <div style="font-size:13.5px; line-height:1.6;">
+          <p>18 adaptively-chosen questions (plus 2 hidden retests) elicit a joint posterior over five parameters
+          &mdash; risk aversion &gamma;, loss aversion &lambda;, probability-weighting curvature &alpha;<sub>w</sub>,
+          present-bias &beta;, and discount factor &delta; &mdash; each on a 6-point grid (7,776 grid cells total).</p>
+          <div class="note" style="font-family: ui-monospace, 'SF Mono', Consolas, monospace; font-size:12px;">
+            v(x; &gamma;,&lambda;) = x^(1&minus;&gamma;) if x&ge;0,&nbsp; &minus;&lambda;&middot;|x|^(1&minus;&gamma;) if x&lt;0<br/>
+            w(p; &alpha;<sub>w</sub>) = exp(&minus;(&minus;ln p)^&alpha;<sub>w</sub>) &mdash; Prelec (1998) probability weighting<br/>
+            D(t; &beta;,&delta;) = &beta;&middot;&delta;<sup>t/30</sup> for t&gt;0, D(0)=1 &mdash; quasi-hyperbolic discounting (Laibson, 1997)<br/>
+            P(choose B) = 1 / (1 + exp(&minus;(U<sub>B</sub>&minus;U<sub>A</sub>)/&tau;)), &tau;=0.35 &mdash; logistic choice rule
+          </div>
+          <p>Each candidate question (from a bank of 130) is scored by expected posterior-entropy reduction and the
+          most informative question is asked next; after each answer the posterior is updated by Bayes' rule in
+          log form. The full derivation, the candidate question bank, and the Empirical-Bayes hierarchical pooling
+          used for the group dashboard below are in the written report, Section 2.5.</p>
+        </div>
+      </details>
+
+      <h2 class="qtext" style="font-size:20px;">2) Portfolio construction methodology (Step 5)</h2>
+      <div style="font-size:13.5px; line-height:1.6;">
+        <p><strong>Asset universe:</strong> the same 66-stock NSE universe, 3-year covariance matrix, and
+        r<sub>f</sub>=6.75% we built for our Markowitz Portfolio Project. Expected returns are back-solved via
+        Black-Litterman-style reverse optimization (market-cap-weighted reference, &lambda;<sub>mkt</sub>=2.5, He
+        &amp; Litterman 1999) since the source workbook exposes only the covariance matrix and an already-optimized
+        weight vector, not per-stock expected returns.</p>
+        <p><strong>EUT:</strong> the long-only tangency (maximum-Sharpe) portfolio with no stock above 10%, solved
+        as a convex quadratic programme in your browser, then split against G-Secs by risky fraction = (tangency excess
+        return)/(&gamma;&middot;tangency variance), clipped to [0,1]. By two-fund separation, every respondent gets the
+        identical equity composition &mdash; only the equity/G-Sec split differs.</p>
+        <p><strong>SP/A-BPT:</strong> two mental accounts (Das, Markowitz, Scheid &amp; Statman, 2010). The
+        <em>safety account</em> holds G-Secs and the tangency portfolio, with the equity share set by Telser's (1955)
+        safety-first rule so that the account loses money in at most 5% of years (here 66% G-Secs, 34% equities).
+        The <em>aspiration account</em> holds the Roy (1952) safety-first portfolio for a target equal to the 75th
+        percentile of &mu; (15.3%), with the same 10% cap per stock. Each respondent's own loss aversion &lambda; sets the
+        split: 30% in the safety account at &lambda;=1.0, rising to 80% at &lambda;=4.0.</p>
+      </div>
+
+      <h2 class="qtext" style="font-size:20px;">3) Survey outcomes &amp; portfolio recommendations &mdash; all ${rows.length} respondents</h2>
+      <label class="field-label">Risk tolerance, time preference &amp; personality scores</label>
+      ${tableHtml}
+      <label class="field-label">Step 4 &mdash; elicited utility, value, probability-weighting &amp; discount functions</label>
+      <p class="lede" style="font-size:13px;">Pooled parameters, same functional forms the elicitation engine scores choices with. Hover a line to see whose it is.</p>
+      ${curvesHtml}
+      <label class="field-label">Portfolio recommendations (standard-&lambda; universe)</label>
+      ${dashHtml}
+      <p class="lede" style="font-size:13px; margin-top:10px;">Per-respondent breakdown (top holdings + personality-linked commentary):</p>
+      ${detailsHtml}
+
+      <h2 class="qtext" style="font-size:20px;">4) Key findings</h2>
+      <div class="note">
+        <strong>EUT saturates for this peer group.</strong> Every respondent's elicited &gamma; is low enough
+        relative to the universe's implied market Sharpe ratio that the long-only EUT risky fraction hits its
+        100% ceiling for all ${rows.length} respondents &mdash; EUT alone prescribes the identical portfolio to
+        everyone here (two-fund separation).
+      </div>
+      <div class="note">
+        <strong>SP/A-BPT differentiates the group.</strong> Because the split between mental accounts is driven by
+        loss aversion &lambda; rather than risk aversion &gamma;, respondents put 30%&ndash;40% of capital in the safety
+        account and 20%&ndash;27% of total wealth in G-Secs, tracking each person's own &lambda; &mdash; Kshitij (&lambda;=1.6)
+        gets the most G-Secs and the lowest BPT volatility; Shree Charan and Kartika (&lambda;=1.0) the least.
+      </div>
+      <div class="note">
+        <strong>BPT carries more total risk than EUT here, and that is consistent.</strong> With &lambda; close to 1 for
+        four of five clients, about 70% goes to the aspiration account. EUT looks safer only because the no-leverage rule
+        pins it at 100% equities: without that rule, EUT would put 112%&ndash;114% in equities for the three &gamma;&asymp;2.2
+        clients (about 18.2%&ndash;18.4% volatility), close to BPT's 18%&ndash;21%. What BPT adds is a ring-fenced safety
+        account that loses money in at most 1 year in 20.
+      </div>
+      <div class="note">
+        <strong>Personality and elicited preferences don't always agree.</strong> Adwaaiit Pande's self-reported
+        risk tolerance (10/10) and Grable-Lytton score (40, highest in the group) sit well above what his elicited
+        &gamma;&asymp;2.19 implies; Shree Charan's BFI-2 profile is flat at exactly 3.00 on all five domains, more
+        consistent with low-effort responding than a genuine null personality signal. See the written report,
+        Section 5, for the full Step 6 commentary on what this means for robo-advisory design.
+      </div>
+      <div class="note">
+        <strong>One identification caveat.</strong> The engine floors the value-function exponent 1&minus;&gamma; at
+        0.05, so every &gamma; from about 0.95 to 3.0 produces the same choices: for Shree Charan, Ayushi and Adwaaiit
+        we know &gamma; is above ~1 but not exactly how far. At &gamma;=3.0 the EUT risky share would be 83% rather
+        than 100%, so EUT saturation for those three is conditional on &gamma; below about 2.5.
+      </div>
+
+      <div class="btn-row" style="margin-top:20px;">
+        <button class="btn" id="evalCsvBtn">Download combined CSV</button>
+      </div>
+      <div class="foot-links">
+        <a href="#" id="takeSurveyLink">Take the survey yourself &rarr;</a><br /><br />
+        <a href="#" id="researcherLink2">Upload additional respondent files (researcher view) &rarr;</a><br /><br />
+        <a href="#" id="backLink2">&larr; Back to start</a>
+      </div>
+    </div>
+  `);
+
+  node.querySelector("#takeSurveyLink").addEventListener("click", (e) => {
+    e.preventDefault(); location.hash = ""; state.screen = "intro"; render();
+  });
+  node.querySelector("#researcherLink2").addEventListener("click", (e) => {
+    e.preventDefault(); location.hash = ""; state.screen = "researcher"; render();
+  });
+  node.querySelector("#backLink2").addEventListener("click", (e) => {
+    e.preventDefault(); location.hash = ""; state.screen = "intro"; render();
+  });
+  node.querySelector("#evalCsvBtn").addEventListener("click", async () => {
+    const headers = ["name", "gamma_pooled", "lambda_pooled", "grableLyttonTotal", "grableLyttonLevel",
+      "dospertInvesting", "dospertGambling", "generalRisk", "generalPatience", "retestConsistency",
+      "EUT_risky_fraction", "EUT_expected_return", "EUT_volatility",
+      "BPT_safety_capital_frac", "BPT_combined_return", "BPT_combined_volatility", "BPT_gsec_weight"];
+    const lines = [headers.join(",")];
+    rows.forEach((r, i) => {
+      const port = portfolios[i];
+      const vals = [
+        r.name, pooled[i].gamma.pooled.toFixed(4), pooled[i].lam.pooled.toFixed(4),
+        r.grableLytton.total, r.grableLytton.level, r.dospertFinancial.investingMean.toFixed(3), r.dospertFinancial.gamblingMean.toFixed(3),
+        r.generalRisk, r.generalPatience, r.retestConsistency,
+        port.eut.riskyFraction.toFixed(4), port.eut.expectedReturn.toFixed(4), port.eut.volatility.toFixed(4),
+        port.bpt.safetyCapitalFrac.toFixed(4), port.bpt.combinedExpectedReturn.toFixed(4), port.bpt.combinedVolatility.toFixed(4), port.bpt.gsecWeight.toFixed(4),
+      ];
+      lines.push(vals.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(","));
+    });
+    await tryDownload("group-results-evaluation-view.csv", lines.join("\n"));
+  });
+
+  mount(node);
+}
+
+if (location.hash === "#evaluate") state.screen = "evaluate";
+render();
+</script>
+</body>
+</html>
